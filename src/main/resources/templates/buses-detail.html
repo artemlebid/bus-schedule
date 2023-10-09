@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bus Detail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Станція смт.Чернівці</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/schedule}">Головна</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search" th:action="@{/schedule/search}" method="get" th:object="${search}">
+                <input th:if="${#fields.hasErrors('searchLine')}" th:errors="*{searchLine}" class="form-control is-invalid me-2" list="datalistOptions" type="search" placeholder="Куди їдемо?" aria-label="Search" th:field="*{searchLine}">
+                <input th:unless="${#fields.hasErrors('searchLine')}" class="form-control me-2" type="search" list="datalistOptions" placeholder="Куди їдемо?" aria-label="Search" th:field="*{searchLine} ">
+                <datalist id="datalistOptions">
+                    <option value="Вінниця">
+                    <option value="Могилів">
+                    <option value="Вапнярка">
+                    <option value="Ямпіль">
+                    <option value="Березівка">
+                    <option value="Джурин">
+                    <option value="Рахни">
+                    <option value="Немирів">
+                    <option value="Моївка">
+                    <option value="Сокіл">
+                    <option value="Гонівка">
+                    <option value="Чубарівка">
+                </datalist>
+                <button class="btn btn-outline-success" type="submit">Пошук</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<!-- Product section-->
+<section class="py-1">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6">
+                <table class="table align-middle">
+                    <thead>
+                    <tr>
+                        <th scope="col">Приб.</th>
+                        <th scope="col">Відпр.</th>
+                        <th scope="col">Зупинка</th>
+                        <th scope="col">Ціна</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                    <tr th:each="item : ${routesStops}" >
+                        <td th:text="${#temporals.format(item.arrivalTime, 'HH:mm')}"></td>
+                        <td th:text="${#temporals.format(item.departureTime, 'HH:mm')}"></td>
+                        <td th:text="${item.stop.name}"></td>
+                        <td><span th:text="${#numbers.formatDecimal(item.price,1,2,'POINT')}"></span><span th:if="${item.price != null}"> грн.</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div class="small mb-1">Рейс</div>
+                <h1 class="display-5 fw-bolder" th:text="${schedule.route.name}"></h1>
+<!--                <div class="fs-5 mb-5">-->
+<!--                    <span th:text="${schedule.price}"></span><span> грн.</span>-->
+<!--                </div>-->
+                <div class="lead">
+                    <ul>
+                        <li>Автобус: <br> <span th:text="${schedule.bus.name}"></span>, <span th:text="${schedule.bus.company.name}"></span></li>
+                        <li>Номерний знак: <span th:text="${schedule.bus.licensePlate}"></span></li>
+                        <li>Вільних місць: <span id="countSeats" th:text="${schedule.seats}"></span></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Оберіть кінцеву зупинку та кількість квитків:</h5>
+                    <div class="d-flex">
+                        <select id="selectStop" class="form-select me-3" aria-label="Default select example">
+                            <option th:each="i, idx : ${routesStops}" th:value="${idx.index + 1}" th:text="${i.stop.name}" th:if="${idx.index > 0}" th:data-bs-whatever="${i.price}">
+                            </option>
+                        </select>
+                        <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 4rem"/>
+<!--                        <input class="form-control  text-center me-3" id="inputQuantity1" type="num" value="1" style="max-width: 3rem"/>-->
+                        <button class="btn btn-outline-success flex-shrink-0 me-3" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">
+                            <i class="bi-cart-fill me-1"></i>
+                            Купити квиток
+                        </button>
+                    </div>
+                    <br>
+                    <div class="alert alert-danger d-none" id="errorAlert" role="alert">
+                        Невірне введення. Введіть коректну кількість.
+                    </div>
+                    <div>
+                        <h5 id="show-price"></h5>
+                    </div>
+                    <script>
+                        // Отримуємо посилання на елементи
+                        var inputQuantity = document.getElementById("inputQuantity");
+                        var countSeats = document.getElementById("countSeats");
+                        var buyButton = document.querySelector(".btn[data-bs-target='#exampleModal']");
+                        var errorAlert = document.getElementById("errorAlert");
+
+                        // Додаємо обробник події для поля вводу при втраті фокусу (blur)
+                        inputQuantity.addEventListener("blur", function() {
+                            // Отримуємо введене значення та кількість місць
+                            var inputValue = parseFloat(inputQuantity.value);
+                            var availableSeats = parseInt(countSeats.textContent);
+
+                            // Перевіряємо умову
+                            if (isNaN(inputValue) || inputValue <= 0 || inputValue > availableSeats) {
+                                // Якщо умова виконується, змінюємо клас інпуту на невалідний
+                                inputQuantity.classList.add("is-invalid");
+                                inputQuantity.classList.remove("is-valid");
+
+                                // Вимикаємо кнопку
+                                buyButton.disabled = true;
+
+                                // Показуємо повідомлення про помилку
+                                errorAlert.classList.remove("d-none");
+                            } else {
+                                // Якщо умова не виконується, змінюємо клас інпуту на валідний
+                                inputQuantity.classList.remove("is-invalid");
+                                inputQuantity.classList.add("is-valid");
+
+                                // Активуємо кнопку
+                                buyButton.disabled = false;
+
+                                // Приховуємо повідомлення про помилку
+                                errorAlert.classList.add("d-none");
+                            }
+
+                            // Додамо умову для зміни стилю в залежності від кількості цифр в введеному числі
+                            if (inputValue >= 10 || inputValue < 0) {
+                                inputQuantity.style.maxWidth = "5rem"; // Якщо два або більше символи
+                            } else {
+                                inputQuantity.style.maxWidth = "4rem"; // Якщо один символ
+                            }
+                        });
+                    </script>
+                    <script>
+                        // Отримуємо посилання на елементи DOM
+                        var selectElement = document.getElementById('selectStop');
+                        var inputQuantity = document.getElementById('inputQuantity');
+                        var resultElement = document.getElementById('show-price');
+
+                        // Додаємо обробники подій для визначення вартості
+                        selectElement.addEventListener('change', calculateTotal);
+                        inputQuantity.addEventListener('input', calculateTotal);
+
+                        // Функція для обчислення вартості та відображення результату
+                        function calculateTotal() {
+                            var selectedIndex = selectElement.selectedIndex;
+                            var selectedOption = selectElement.options[selectedIndex];
+                            var price = parseFloat(selectedOption.getAttribute('data-bs-whatever'));
+                            var quantity = parseInt(inputQuantity.value);
+
+                            if (!isNaN(price) && !isNaN(quantity)) {
+                                var totalPrice = price * quantity;
+                                resultElement.textContent = 'До сплати: ' + totalPrice.toFixed(2) + ' грн.';
+                            } else {
+                                resultElement.textContent = '';
+                            }
+                        }
+
+                        // Викликаємо calculateTotal() після завантаження сторінки
+                        document.addEventListener('DOMContentLoaded', calculateTotal);
+                    </script>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Оплата квитка</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="row g-2" th:action="@{/schedule/order}" method="post" th:object="${orderForm}">
+                                        <input type="hidden" id="hiddenFieldFromStop" name="fieldName" th:value="${routesStops.get(0).stop.name}" th:field="*{fromStop}"/>
+                                        <input type="hidden" id="hiddenFieldScheduleId" name="fieldName" th:value="${schedule.id}" th:field="*{schedule}"/>
+                                        <div class="col-auto">
+                                            <label for="recipient-stop" class="col-form-label">Зупинка:</label>
+                                            <input type="text" class="form-control" id="recipient-stop" th:field="*{toStop}" disabled>
+                                        </div>
+                                        <div class="col-auto">
+                                            <label for="recipient-count" class="col-form-label">Кільк. квитків:</label>
+                                            <input type="text" class="form-control" id="recipient-count" th:field="*{countSeats}" disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-price" class="col-form-label">Ціна (грн.):</label>
+                                            <input type="text" class="form-control" id="recipient-price" th:field="*{payment}" disabled>
+                                        </div>
+                                        <div class="col-auto">
+                                            <label for="recipient-name" class="col-form-label">Імʼя:</label>
+                                            <input type="text" class="form-control" id="recipient-name" th:field="*{name}" placeholder="Введіть імʼя">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label for="recipient-surname" class="col-form-label">Прізвище:</label>
+                                            <input type="text" class="form-control" id="recipient-surname" th:field="*{surname}" placeholder="Введіть прізвище">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-phone" class="col-form-label">Телефон:</label>
+                                            <input type="tel" class="form-control" id="recipient-phone" name="phone" maxlength="13" th:field="*{phone}" placeholder="098-765-43-21" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-email" class="col-form-label">Email:</label>
+                                            <input type="email" class="form-control" id="recipient-email" th:field="*{email}" placeholder="example@mail.com">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-card" class="col-form-label">Номер карти:</label>
+                                            <input type="text" class="form-control" id="recipient-card" placeholder="xxxx-xxxx-xxxx-xxxx" maxlength="19">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label for="recipient-date" class="col-form-label">Термін дії:</label>
+                                            <input type="text" class="form-control" id="recipient-date" placeholder="мм/РР" maxlength="5">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label for="recipient-cvv" class="col-form-label">CVV:</label>
+                                            <input type="password" class="form-control" id="recipient-cvv" maxlength="3" placeholder="xxx">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+                                    <button class="btn btn-primary" type="submit">Оплатити</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Related items section-->
+<!--<section class="py-5 bg-light">-->
+<!--    <div class="container px-4 px-lg-5 mt-5">-->
+<!--        <h2 class="fw-bolder mb-4">Related products</h2>-->
+<!--        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">-->
+<!--            <div class="col mb-5">-->
+<!--                <div class="card h-100">-->
+<!--                    &lt;!&ndash; Product image&ndash;&gt;-->
+<!--                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />-->
+<!--                    &lt;!&ndash; Product details&ndash;&gt;-->
+<!--                    <div class="card-body p-4">-->
+<!--                        <div class="text-center">-->
+<!--                            &lt;!&ndash; Product name&ndash;&gt;-->
+<!--                            <h5 class="fw-bolder">Fancy Product</h5>-->
+<!--                            &lt;!&ndash; Product price&ndash;&gt;-->
+<!--                            $40.00 - $80.00-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; Product actions&ndash;&gt;-->
+<!--                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">-->
+<!--                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col mb-5">-->
+<!--                <div class="card h-100">-->
+<!--                    &lt;!&ndash; Sale badge&ndash;&gt;-->
+<!--                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>-->
+<!--                    &lt;!&ndash; Product image&ndash;&gt;-->
+<!--                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />-->
+<!--                    &lt;!&ndash; Product details&ndash;&gt;-->
+<!--                    <div class="card-body p-4">-->
+<!--                        <div class="text-center">-->
+<!--                            &lt;!&ndash; Product name&ndash;&gt;-->
+<!--                            <h5 class="fw-bolder">Special Item</h5>-->
+<!--                            &lt;!&ndash; Product reviews&ndash;&gt;-->
+<!--                            <div class="d-flex justify-content-center small text-warning mb-2">-->
+<!--                                <div class="bi-star-fill"></div>-->
+<!--                                <div class="bi-star-fill"></div>-->
+<!--                                <div class="bi-star-fill"></div>-->
+<!--                                <div class="bi-star-fill"></div>-->
+<!--                                <div class="bi-star-fill"></div>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; Product price&ndash;&gt;-->
+<!--                            <span class="text-muted text-decoration-line-through">$20.00</span>-->
+<!--                            $18.00-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; Product actions&ndash;&gt;-->
+<!--                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">-->
+<!--                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col mb-5">-->
+<!--                <div class="card h-100">-->
+<!--                    &lt;!&ndash; Sale badge&ndash;&gt;-->
+<!--                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>-->
+<!--                    &lt;!&ndash; Product image&ndash;&gt;-->
+<!--                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />-->
+<!--                    &lt;!&ndash; Product details&ndash;&gt;-->
+<!--                    <div class="card-body p-4">-->
+<!--                        <div class="text-center">-->
+<!--                            &lt;!&ndash; Product name&ndash;&gt;-->
+<!--                            <h5 class="fw-bolder">Sale Item</h5>-->
+<!--                            &lt;!&ndash; Product price&ndash;&gt;-->
+<!--                            <span class="text-muted text-decoration-line-through">$50.00</span>-->
+<!--                            $25.00-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; Product actions&ndash;&gt;-->
+<!--                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">-->
+<!--                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col mb-5">-->
+<!--                <div class="card h-100">-->
+<!--                    &lt;!&ndash; Product image&ndash;&gt;-->
+<!--                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />-->
+<!--                    &lt;!&ndash; Product details&ndash;&gt;-->
+<!--                    <div class="card-body p-4">-->
+<!--                        <div class="text-center">-->
+<!--                            &lt;!&ndash; Product name&ndash;&gt;-->
+<!--                            <h5 class="fw-bolder">Popular Item</h5>-->
+<!--                            &lt;!&ndash; Product reviews&ndash;&gt;-->
+<!--                            <div class="d-flex justify-content-center small text-warning mb-2">-->
+<!--                                <div class="bi-star-fill"></div>-->
+<!--                                <div class="bi-star-fill"></div>-->
+<!--                                <div class="bi-star-fill"></div>-->
+<!--                                <div class="bi-star-fill"></div>-->
+<!--                                <div class="bi-star-fill"></div>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; Product price&ndash;&gt;-->
+<!--                            $40.00-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; Product actions&ndash;&gt;-->
+<!--                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">-->
+<!--                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+<!-- Footer-->
+<!--<footer class="py-5 bg-dark">-->
+<!--    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>-->
+<!--</footer>-->
+<!-- Bootstrap core JS-->
+<script>
+    // Отримуємо посилання на елементи DOM
+    var selectStop = document.getElementById('selectStop');
+    var inputQuantity = document.getElementById('inputQuantity');
+    var recipientStop = document.getElementById('recipient-stop');
+    var recipientCount = document.getElementById('recipient-count');
+    var recipientPrice = document.getElementById('recipient-price');
+
+    // Отримуємо посилання на модальне вікно
+    var modal = document.getElementById('exampleModal');
+
+    // Додаємо обробник події для кнопки "Купити квиток"
+    document.querySelector('[data-bs-target="#exampleModal"]').addEventListener('click', function() {
+        // Отримуємо вибраний елемент селекту
+        var selectedOption = selectStop.options[selectStop.selectedIndex];
+        // Отримуємо значення data-bs-whatever
+        var dataWhatever = selectedOption.getAttribute('data-bs-whatever');
+        // Отримуємо значення кількості
+        var quantity = parseInt(inputQuantity.value);
+
+        // Розраховуємо ціну (ціна = кількість * data-bs-whatever)
+        var price = quantity * parseFloat(dataWhatever);
+
+        // Встановлюємо значення полів в модальному вікні
+        recipientStop.value = selectedOption.textContent;
+        recipientCount.value = quantity;
+        recipientPrice.value = price.toFixed(2); // Округлюємо ціну до двох знаків після коми
+    });
+
+    // Додаємо обробник події для закриття модального вікна
+    modal.addEventListener('hidden.bs.modal', function () {
+        // Очищаємо поля в модальному вікні при закритті
+        recipientStop.value = '';
+        recipientCount.value = '';
+        recipientPrice.value = '';
+    });
+</script>
+<script>
+    // Отримуємо доступ до поле вводу
+    var phoneInput = document.getElementById('recipient-phone');
+
+    // Додаємо обробник події input
+    phoneInput.addEventListener('input', function() {
+        // Видаляємо всі нецифрові символи з введеного тексту
+        var inputValue = phoneInput.value.replace(/\D/g, '');
+
+        // Форматуємо номер телефону у вигляді "099-876-54-32"
+        var formattedValue = '';
+        for (var i = 0; i < inputValue.length; i++) {
+            if (i === 0) {
+                formattedValue += inputValue[i];
+            } else if (i === 3 || i === 6 || i === 8) {
+                formattedValue += '-' + inputValue[i];
+            } else {
+                formattedValue += inputValue[i];
+            }
+        }
+
+        // Встановлюємо отформатоване значення у поле вводу
+        phoneInput.value = formattedValue;
+    });
+</script>
+<script>
+    // Отримуємо доступ до поля вводу
+    var cardInput = document.getElementById('recipient-card');
+
+    // Додаємо обробник події input
+    cardInput.addEventListener('input', function() {
+        var inputValue = cardInput.value.replace(/\D/g, ''); // Видаляємо нецифрові символи
+        var formattedValue = '';
+
+        // Форматуємо введений текст, додаючи дефіси після кожних 4 символів
+        for (var i = 0; i < inputValue.length; i++) {
+            if (i % 4 === 0 && i !== 0) {
+                formattedValue += '-';
+            }
+            formattedValue += inputValue[i];
+        }
+
+        // Встановлюємо отформатований текст у поле вводу
+        cardInput.value = formattedValue;
+    });
+</script>
+<script>
+    // Отримуємо доступ до поля вводу
+    var dateInput = document.getElementById('recipient-date');
+
+    // Додаємо обробник події input
+    dateInput.addEventListener('input', function() {
+        var inputValue = dateInput.value.replace(/\D/g, ''); // Видаляємо нецифрові символи
+        var formattedValue = '';
+
+        for (var i = 0; i < inputValue.length; i++) {
+            if (i % 2 === 0 && i !== 0) {
+                formattedValue += '/';
+            }
+            formattedValue += inputValue[i];
+        }
+
+        // Встановлюємо отформатований текст у поле вводу
+        dateInput.value = formattedValue;
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
