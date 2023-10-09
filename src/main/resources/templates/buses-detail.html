@@ -117,78 +117,6 @@
                     <div>
                         <h5 id="show-price"></h5>
                     </div>
-                    <script>
-                        // Отримуємо посилання на елементи
-                        var inputQuantity = document.getElementById("inputQuantity");
-                        var countSeats = document.getElementById("countSeats");
-                        var buyButton = document.querySelector(".btn[data-bs-target='#exampleModal']");
-                        var errorAlert = document.getElementById("errorAlert");
-
-                        // Додаємо обробник події для поля вводу при втраті фокусу (blur)
-                        inputQuantity.addEventListener("blur", function() {
-                            // Отримуємо введене значення та кількість місць
-                            var inputValue = parseFloat(inputQuantity.value);
-                            var availableSeats = parseInt(countSeats.textContent);
-
-                            // Перевіряємо умову
-                            if (isNaN(inputValue) || inputValue <= 0 || inputValue > availableSeats) {
-                                // Якщо умова виконується, змінюємо клас інпуту на невалідний
-                                inputQuantity.classList.add("is-invalid");
-                                inputQuantity.classList.remove("is-valid");
-
-                                // Вимикаємо кнопку
-                                buyButton.disabled = true;
-
-                                // Показуємо повідомлення про помилку
-                                errorAlert.classList.remove("d-none");
-                            } else {
-                                // Якщо умова не виконується, змінюємо клас інпуту на валідний
-                                inputQuantity.classList.remove("is-invalid");
-                                inputQuantity.classList.add("is-valid");
-
-                                // Активуємо кнопку
-                                buyButton.disabled = false;
-
-                                // Приховуємо повідомлення про помилку
-                                errorAlert.classList.add("d-none");
-                            }
-
-                            // Додамо умову для зміни стилю в залежності від кількості цифр в введеному числі
-                            if (inputValue >= 10 || inputValue < 0) {
-                                inputQuantity.style.maxWidth = "5rem"; // Якщо два або більше символи
-                            } else {
-                                inputQuantity.style.maxWidth = "4rem"; // Якщо один символ
-                            }
-                        });
-                    </script>
-                    <script>
-                        // Отримуємо посилання на елементи DOM
-                        var selectElement = document.getElementById('selectStop');
-                        var inputQuantity = document.getElementById('inputQuantity');
-                        var resultElement = document.getElementById('show-price');
-
-                        // Додаємо обробники подій для визначення вартості
-                        selectElement.addEventListener('change', calculateTotal);
-                        inputQuantity.addEventListener('input', calculateTotal);
-
-                        // Функція для обчислення вартості та відображення результату
-                        function calculateTotal() {
-                            var selectedIndex = selectElement.selectedIndex;
-                            var selectedOption = selectElement.options[selectedIndex];
-                            var price = parseFloat(selectedOption.getAttribute('data-bs-whatever'));
-                            var quantity = parseInt(inputQuantity.value);
-
-                            if (!isNaN(price) && !isNaN(quantity)) {
-                                var totalPrice = price * quantity;
-                                resultElement.textContent = 'До сплати: ' + totalPrice.toFixed(2) + ' грн.';
-                            } else {
-                                resultElement.textContent = '';
-                            }
-                        }
-
-                        // Викликаємо calculateTotal() після завантаження сторінки
-                        document.addEventListener('DOMContentLoaded', calculateTotal);
-                    </script>
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -367,6 +295,78 @@
 <!--</footer>-->
 <!-- Bootstrap core JS-->
 <script>
+    // Отримуємо посилання на елементи
+    var inputQuantity = document.getElementById("inputQuantity");
+    var countSeats = document.getElementById("countSeats");
+    var buyButton = document.querySelector(".btn[data-bs-target='#exampleModal']");
+    var errorAlert = document.getElementById("errorAlert");
+
+    // Додаємо обробник події для поля вводу при втраті фокусу (blur)
+    inputQuantity.addEventListener("blur", function() {
+        // Отримуємо введене значення та кількість місць
+        var inputValue = parseFloat(inputQuantity.value);
+        var availableSeats = parseInt(countSeats.textContent);
+
+        // Перевіряємо умову
+        if (isNaN(inputValue) || inputValue <= 0 || inputValue > availableSeats) {
+            // Якщо умова виконується, змінюємо клас інпуту на невалідний
+            inputQuantity.classList.add("is-invalid");
+            inputQuantity.classList.remove("is-valid");
+
+            // Вимикаємо кнопку
+            buyButton.disabled = true;
+
+            // Показуємо повідомлення про помилку
+            errorAlert.classList.remove("d-none");
+        } else {
+            // Якщо умова не виконується, змінюємо клас інпуту на валідний
+            inputQuantity.classList.remove("is-invalid");
+            inputQuantity.classList.add("is-valid");
+
+            // Активуємо кнопку
+            buyButton.disabled = false;
+
+            // Приховуємо повідомлення про помилку
+            errorAlert.classList.add("d-none");
+        }
+
+        // Додамо умову для зміни стилю в залежності від кількості цифр в введеному числі
+        if (inputValue >= 10 || inputValue < 0) {
+            inputQuantity.style.maxWidth = "5rem"; // Якщо два або більше символи
+        } else {
+            inputQuantity.style.maxWidth = "4rem"; // Якщо один символ
+        }
+    });
+</script>
+<script>
+    // Отримуємо посилання на елементи DOM
+    var selectElement = document.getElementById('selectStop');
+    var inputQuantity = document.getElementById('inputQuantity');
+    var resultElement = document.getElementById('show-price');
+
+    // Додаємо обробники подій для визначення вартості
+    selectElement.addEventListener('change', calculateTotal);
+    inputQuantity.addEventListener('input', calculateTotal);
+
+    // Функція для обчислення вартості та відображення результату
+    function calculateTotal() {
+        var selectedIndex = selectElement.selectedIndex;
+        var selectedOption = selectElement.options[selectedIndex];
+        var price = parseFloat(selectedOption.getAttribute('data-bs-whatever'));
+        var quantity = parseInt(inputQuantity.value);
+
+        if (!isNaN(price) && !isNaN(quantity)) {
+            var totalPrice = price * quantity;
+            resultElement.textContent = 'До сплати: ' + totalPrice.toFixed(2) + ' грн.';
+        } else {
+            resultElement.textContent = '';
+        }
+    }
+
+    // Викликаємо calculateTotal() після завантаження сторінки
+    document.addEventListener('DOMContentLoaded', calculateTotal);
+</script>
+<script>
     // Отримуємо посилання на елементи DOM
     var selectStop = document.getElementById('selectStop');
     var inputQuantity = document.getElementById('inputQuantity');
@@ -406,7 +406,6 @@
 <script>
     // Отримуємо доступ до поле вводу
     var phoneInput = document.getElementById('recipient-phone');
-
     // Додаємо обробник події input
     phoneInput.addEventListener('input', function() {
         // Видаляємо всі нецифрові символи з введеного тексту
