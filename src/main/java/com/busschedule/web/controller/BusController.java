@@ -22,8 +22,9 @@ public class BusController {
     private OrderService orderService;
 
     @Autowired
-    public BusController(ScheduleService scheduleService) {
+    public BusController(ScheduleService scheduleService, OrderService orderService) {
         this.scheduleService = scheduleService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/schedule")
@@ -34,8 +35,10 @@ public class BusController {
         for(Schedule schedule : overdueSchedule){
             LocalDateTime departureTime = schedule.getDepartureTime();
             LocalDateTime arrivalTime = schedule.getArrivalTime();
-            schedule.setDepartureTime(departureTime.plusDays(1));
-            schedule.setArrivalTime(arrivalTime.plusDays(1));
+            schedule.setDepartureTime(departureTime.plusDays(2));
+            schedule.setArrivalTime(arrivalTime.plusDays(2));
+            schedule.setSeats(30);
+            schedule.setAccessibility("У продажі");
         }
         scheduleService.saveSchedule(overdueSchedule);
 
@@ -67,9 +70,13 @@ public class BusController {
         return "buses-detail";
     }
     @PostMapping("/schedule/order")
-    public String scheduleOrder(@ModelAttribute("orderForm") OrderForm orderForm, BindingResult result){
+    public String scheduleOrder(@ModelAttribute("orderForm") OrderForm orderForm, BindingResult result, @ModelAttribute("schedule")Schedule schedule){
         if(result.hasErrors()){
             return "buses-error";
+        }
+        schedule.setSeats(schedule.getSeats() - orderForm.getCountSeats());
+        if(schedule.getSeats() == 0){
+            schedule.setAccessibility("Продано!");
         }
         orderService.save(orderForm);
         return "buses-order";
@@ -83,6 +90,9 @@ public class BusController {
             LocalDateTime currentTime = LocalDateTime.now();
             model.addAttribute("time", currentTime);
             model.addAttribute("search", search);
+//            model.addAttribute("scheduleToday", oldScheduleToday);
+//            model.addAttribute("scheduleTomorrow", oldScheduleTomorrow);
+//            model.addAttribute("scheduleAfterTomorrow", oldScheduleAfterTomorrow);
 
             return "buses-list";
         }

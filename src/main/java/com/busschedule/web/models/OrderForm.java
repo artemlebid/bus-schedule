@@ -40,7 +40,7 @@ public class OrderForm {
     //    @NotEmpty(message = "Email should not be empty")
 //    @Email(message = "Incorrect email")
     private String email;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
     @CreationTimestamp

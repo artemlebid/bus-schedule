@@ -111,9 +111,13 @@
                         </button>
                     </div>
                     <br>
-                    <div class="alert alert-danger d-none" id="errorAlert" role="alert">
+                    <div class="alert alert-danger d-none" id="errorAlertCountSeats" role="alert">
                         Невірне введення. Введіть коректну кількість.
                     </div>
+                    <div class="alert alert-danger d-none" id="errorAlertAvalible" role="alert">
+                        Нажаль вільні місця закінчились :(
+                    </div>
+
                     <div>
                         <h5 id="show-price"></h5>
                     </div>
@@ -126,19 +130,20 @@
                                 </div>
                                 <div class="modal-body">
                                     <form class="row g-2" th:action="@{/schedule/order}" method="post" th:object="${orderForm}">
-                                        <input type="hidden" id="hiddenFieldFromStop" name="fieldName" th:value="${routesStops.get(0).stop.name}" th:field="*{fromStop}"/>
-                                        <input type="hidden" id="hiddenFieldScheduleId" name="fieldName" th:value="${schedule.id}" th:field="*{schedule}"/>
+                                        <input type="hidden" id="hiddenFieldFromStop" th:value="${routesStops.get(0).stop.name}" th:name="fromStop"/>
+                                        <input type="hidden" id="hiddenFieldScheduleId" th:value="${schedule.id}" th:name="schedule"/>
                                         <div class="col-auto">
                                             <label for="recipient-stop" class="col-form-label">Зупинка:</label>
-                                            <input type="text" class="form-control" id="recipient-stop" th:field="*{toStop}" disabled>
+                                            <input type="text" class="form-control" id="recipient-stop" th:name="toStop" readonly="">
+
                                         </div>
                                         <div class="col-auto">
                                             <label for="recipient-count" class="col-form-label">Кільк. квитків:</label>
-                                            <input type="text" class="form-control" id="recipient-count" th:field="*{countSeats}" disabled>
+                                            <input type="text" class="form-control" id="recipient-count" th:name="countSeats" readonly="">
                                         </div>
                                         <div class="mb-3">
                                             <label for="recipient-price" class="col-form-label">Ціна (грн.):</label>
-                                            <input type="text" class="form-control" id="recipient-price" th:field="*{payment}" disabled>
+                                            <input type="text" class="form-control" id="recipient-price" th:name="payment" readonly="">
                                         </div>
                                         <div class="col-auto">
                                             <label for="recipient-name" class="col-form-label">Імʼя:</label>
@@ -150,7 +155,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="recipient-phone" class="col-form-label">Телефон:</label>
-                                            <input type="tel" class="form-control" id="recipient-phone" name="phone" maxlength="13" th:field="*{phone}" placeholder="098-765-43-21" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                                            <input type="text" class="form-control" id="recipient-phone" name="phone" maxlength="13" th:field="*{phone}" placeholder="098-765-43-21">
                                         </div>
                                         <div class="mb-3">
                                             <label for="recipient-email" class="col-form-label">Email:</label>
@@ -168,11 +173,12 @@
                                             <label for="recipient-cvv" class="col-form-label">CVV:</label>
                                             <input type="password" class="form-control" id="recipient-cvv" maxlength="3" placeholder="xxx">
                                         </div>
+                                        <button class="btn btn-primary" type="submit" id="payment-form-submit" hidden>Оплатити</button>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
-                                    <button class="btn btn-primary" type="submit">Оплатити</button>
+                                    <button class="btn btn-primary" type="submit" onclick="submitForm();">Оплатити</button>
                                 </div>
                             </div>
                         </div>
@@ -295,11 +301,18 @@
 <!--</footer>-->
 <!-- Bootstrap core JS-->
 <script>
+    const submitBtn = document.getElementById('payment-form-submit');
+
+    function submitForm() {
+        submitBtn.click();
+    }
+</script>
+<script>
     // Отримуємо посилання на елементи
     var inputQuantity = document.getElementById("inputQuantity");
     var countSeats = document.getElementById("countSeats");
     var buyButton = document.querySelector(".btn[data-bs-target='#exampleModal']");
-    var errorAlert = document.getElementById("errorAlert");
+    var errorAlert = document.getElementById("errorAlertCountSeats");
 
     // Додаємо обробник події для поля вводу при втраті фокусу (blur)
     inputQuantity.addEventListener("blur", function() {
@@ -385,7 +398,6 @@
         var dataWhatever = selectedOption.getAttribute('data-bs-whatever');
         // Отримуємо значення кількості
         var quantity = parseInt(inputQuantity.value);
-
         // Розраховуємо ціну (ціна = кількість * data-bs-whatever)
         var price = quantity * parseFloat(dataWhatever);
 
@@ -394,14 +406,13 @@
         recipientCount.value = quantity;
         recipientPrice.value = price.toFixed(2); // Округлюємо ціну до двох знаків після коми
     });
-
-    // Додаємо обробник події для закриття модального вікна
-    modal.addEventListener('hidden.bs.modal', function () {
-        // Очищаємо поля в модальному вікні при закритті
-        recipientStop.value = '';
-        recipientCount.value = '';
-        recipientPrice.value = '';
-    });
+    // // Додаємо обробник події для закриття модального вікна
+    // modal.addEventListener('hidden.bs.modal', function () {
+    //     // Очищаємо поля в модальному вікні при закритті
+    //     recipientStop.value = '';
+    //     recipientCount.value = '';
+    //     recipientPrice.value = '';
+    // });
 </script>
 <script>
     // Отримуємо доступ до поле вводу
@@ -468,6 +479,29 @@
         dateInput.value = formattedValue;
     });
 </script>
+<script>
+    // Отримуємо доступ до необхідних елементів
+    var countSeatsElement = document.getElementById('countSeats');
+    var buyTicketButton = document.querySelector(".btn[data-bs-target='#exampleModal']");
+    var errorAlertAvalible = document.getElementById('errorAlertAvalible');
+
+    // Перевіряємо кількість вільних місць при завантаженні сторінки
+    checkAvailableSeats();
+
+    // Функція для перевірки кількості вільних місць та відповідного стану кнопки і повідомлення
+    function checkAvailableSeats() {
+        var availableSeats = parseInt(countSeatsElement.textContent);
+
+        if (availableSeats === 0) {
+            buyTicketButton.disabled = true;
+            errorAlertAvalible.classList.remove('d-none'); // Показуємо повідомлення про помилку
+        } else {
+            buyTicketButton.disabled = false;
+            errorAlertAvalible.classList.add('d-none'); // Приховуємо повідомлення про помилку
+        }
+    }
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
