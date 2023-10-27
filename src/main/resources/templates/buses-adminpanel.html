@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Панель керування</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Станція смт.Чернівці</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/schedule}">Головна</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            <form class="d-flex" th:action="@{/schedule/search}" th:object="${search}" role="search"  method="get">
+                <input th:if="${#fields.hasErrors('searchLine')}" th:errors="*{searchLine}" class="form-control is-invalid me-2" list="datalistOptions" type="search" placeholder="Куди їдемо?" aria-label="Search" th:field="*{searchLine}">
+                <input th:unless="${#fields.hasErrors('searchLine')}" class="form-control me-2" type="search" list="datalistOptions" placeholder="Куди їдемо?" aria-label="Search" th:field="*{searchLine}">
+                <datalist id="datalistOptions">
+                    <option value="Вінниця">
+                    <option value="Могилів">
+                    <option value="Вапнярка">
+                    <option value="Ямпіль">
+                    <option value="Березівка">
+                    <option value="Джурин">
+                    <option value="Рахни">
+                    <option value="Немирів">
+                    <option value="Моївка">
+                    <option value="Сокіл">
+                    <option value="Гонівка">
+                    <option value="Чубарівка">
+                </datalist>
+                <button class="btn btn-outline-success" type="submit">Пошук</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<section class="py-1">
+    <div class="container px-4 px-lg-0 my-5">
+        <div class="row gx-4 gx-lg-5">
+            <div class="col-md-2">
+                <div class="container">
+                    <div class="row">
+                        <div class="btn-group-vertical" role="group" aria-label="Vertical radio toggle button group">
+                            <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio1" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="vbtn-radio1">Рейси</label>
+                            <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio2" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="vbtn-radio2">Автобуси</label>
+                            <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="vbtn-radio3">Компанії</label>
+                            <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio4" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="vbtn-radio4">Маршрути</label>
+                            <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio5" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="vbtn-radio5">Зупинки</label>
+                            <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio6" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="vbtn-radio6">Маршрут<br>Зупинка</label>
+                            <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio7" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="vbtn-radio7">Ордери</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="collapse show" id="editSchedules" style="">
+                    <div class="card card-body">
+                        <div class="col-md-2">
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                        </div>
+                        <table class="table align-middle text-center">
+                            <thead>
+                            <tr class="text-center">
+                                <th scope="col">Відпр.</th>
+                                <th scope="col">Рейс</th>
+                                <th scope="col">Прибуття</th>
+                                <th scope="col">Ціна</th>
+                                <th scope="col">Автобус</th>
+                                <th scope="col">Статус</th>
+                                <th scope="col">Вільні місця</th>
+                                <th scope="col">Опції</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                            <tr>
+                                <td class="table-success text-center" colspan="8" th:text="Сьогодні"></td>
+                            </tr>
+                            <tr th:each="schedule : ${scheduleToday}">
+                                <td th:text="${#temporals.format(schedule.departureTime, 'HH:mm')}"></td>
+                                <td th:text="${schedule.getRoute().name}"></td>
+                                <td th:text="${#temporals.format(schedule.arrivalTime, 'HH:mm')}"></td>
+                                <td><span th:text="${#numbers.formatDecimal(schedule.price,1,2,'POINT')}"></span><span> грн.</span></td>
+                                <td th:text="${schedule.getBus().name}"></td>
+                                <td th:text="${schedule.accessibility}"></td>
+                                <td th:text="${schedule.seats}"></td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-bs-whatever="${schedule.route.name}" th:data-bs-routeid="${schedule.route.id}">Купити</a>-->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-success text-center" colspan="8" th:text="${#temporals.format(time.plusDays(1), 'dd-MM-yyyy')}"></td>
+                            </tr>
+                            <tr class="text-center" th:each="schedule : ${scheduleTomorrow}">
+                                <td th:text="${#temporals.format(schedule.departureTime, 'HH:mm')}"></td>
+                                <td th:text="${schedule.getRoute().name}"></td>
+                                <td th:text="${#temporals.format(schedule.arrivalTime, 'HH:mm')}"></td>
+                                <td><span th:text="${#numbers.formatDecimal(schedule.price,1,2,'POINT')}"></span><span> грн.</span></td>
+                                <td th:text="${schedule.getBus().name}"></td>
+                                <td th:text="${schedule.accessibility}"></td>
+                                <td th:text="${schedule.seats}"></td>
+                                <td>
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Купити</a>-->
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td class="table-success text-center" colspan="8" th:text="${#temporals.format(time.plusDays(2), 'dd-MM-yyyy')}"></td>
+                            </tr>
+                            <tr th:each="schedule : ${scheduleAfterTomorrow}">
+                                <td th:text="${#temporals.format(schedule.departureTime, 'HH:mm')}"></td>
+                                <td th:text="${schedule.getRoute().name}"></td>
+                                <td th:text="${#temporals.format(schedule.arrivalTime, 'HH:mm')}"></td>
+                                <td><span th:text="${#numbers.formatDecimal(schedule.price,1,2,'POINT')}"></span><span> грн.</span></td>
+                                <td th:text="${schedule.getBus().name}"></td>
+                                <td th:text="${schedule.accessibility}"></td>
+                                <td th:text="${schedule.seats}"></td>
+                                <td>
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Купити</a>-->
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="collapse show" id="editBuses" style="">
+                    <div class="card card-body">
+                        <div class="col-md-2">
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                        </div>
+                        <table class="table align-middle text-center">
+                            <thead>
+                            <tr class="text-center">
+                                <th scope="col">Назва</th>
+                                <th scope="col">Держ. номер</th>
+                                <th scope="col">Компанія</th>
+                                <th scope="col">Опції</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                            <tr th:each="bus : ${buses}">
+                                <td th:text="${bus.name}"></td>
+                                <td th:text="${bus.licensePlate}"></td>
+                                <td th:text="${bus.company.name}"></td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-bs-whatever="${schedule.route.name}" th:data-bs-routeid="${schedule.route.id}">Купити</a>-->
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="collapse show" id="editCompanies" style="">
+                    <div class="card card-body">
+                        <div class="col-md-2">
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                        </div>
+                        <table class="table align-middle text-center">
+                            <thead>
+                            <tr class="text-center">
+                                <th scope="col">Назва компанії</th>
+                                <!--                                    <th scope="col">Автобуси компанії</th>-->
+                                <th scope="col">Опції</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                            <tr th:each="company : ${companies}">
+                                <td th:text="${company.name}"></td>
+                                <!--                                    <td>-->
+                                <!--                                        <select class="form-select">-->
+                                <!--                                            <option th:each="bus : ${company.bus}"-->
+                                <!--                                                    th:value="${bus.id}"-->
+                                <!--                                                    th:text="${bus.name}"></option>-->
+                                <!--                                        </select>-->
+                                <!--                                    </td>-->
+                                <td class="text-center">
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="collapse show" id="editRoute" style="">
+                    <div class="card card-body">
+                        <div class="col-md-2">
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                        </div>
+                        <table class="table align-middle text-center">
+                            <thead>
+                            <tr class="text-center">
+                                <th scope="col">Назва маршруту</th>
+                                <th scope="col">Опції</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                            <tr th:each="route : ${routes}">
+                                <td th:text="${route.name}"></td>
+                                <td class="text-center">
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="collapse show" id="editStops" style="">
+                    <div class="card card-body">
+                        <div class="col-md-2">
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                        </div>
+                        <table class="table align-middle text-center">
+                            <thead>
+                            <tr class="text-center">
+                                <th scope="col">Назва зупинки</th>
+                                <th scope="col">Опції</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                            <tr th:each="stop : ${stops}">
+                                <td th:text="${stop.name}"></td>
+
+                                <td class="text-center">
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="collapse show" id="editRouteStop" style="">
+                    <div class="card card-body">
+                        <div class="col-md-2">
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                        </div>
+                        <table class="table align-middle text-center">
+                            <thead>
+                            <tr class="text-center">
+                                <th scope="col">Маршрут</th>
+                                <th scope="col">Зупинка</th>
+                                <th scope="col">Номер зупинки</th>
+                                <th scope="col">Ціна</th>
+                                <th scope="col">Прибуття</th>
+                                <th scope="col">Відправка</th>
+                                <th scope="col">Опції</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                            <tr th:each="rs : ${routesStops}">
+                                <td th:text="${rs.route.name}"></td>
+                                <td th:text="${rs.stop.name}"></td>
+                                <td th:text="${rs.stopNumber}"></td>
+                                <td th:text="${rs.price}"></td>
+                                <td th:text="${rs.arrivalTime}"></td>
+                                <td th:text="${rs.departureTime}"></td>
+
+                                <td class="text-center">
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="collapse show" id="editOrders" style="">
+                    <div class="card card-body overflow-auto">
+                        <table class="table align-middle text-center text-nowrap">
+                            <thead>
+                            <tr class="text-center">
+                                <th scope="col">ID</th>
+                                <th scope="col">Імʼя</th>
+                                <th scope="col">Прізвище</th>
+                                <th scope="col">Телефон</th>
+                                <th scope="col">Пошта</th>
+                                <th scope="col">Маршрут</th>
+                                <th scope="col">Відправлення</th>
+                                <th scope="col">Зупинка</th>
+                                <th scope="col">Куплені квитки</th>
+                                <th scope="col">Ціна</th>
+                                <th scope="col">Автобус</th>
+                                <th scope="col">Держ. номер</th>
+                                <th scope="col">Відправка</th>
+                                <th scope="col">Прибуття</th>
+                                <th scope="col">Дата створення</th>
+                                <!--                                <th scope="col">Опції</th>-->
+                            </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                            <tr th:each="order : ${orders}">
+                                <td th:text="${order.id}"></td>
+                                <td th:text="${order.name}"></td>
+                                <td th:text="${order.surname}"></td>
+                                <td th:text="${order.phone}"></td>
+                                <td th:text="${order.email}"></td>
+                                <td th:text="${order.schedule.route.name}"></td>
+                                <td th:text="${order.fromStop}"></td>
+                                <td th:text="${order.toStop}"></td>
+                                <td th:text="${order.countSeats}"></td>
+                                <td th:text="${order.payment}"></td>
+                                <td th:text="${order.schedule.bus.name}"></td>
+                                <td th:text="${order.schedule.bus.licensePlate}"></td>
+                                <td th:text="${order.schedule.departureTime}"></td>
+                                <td th:text="${order.schedule.arrivalTime}"></td>
+                                <td th:text="${order.created}"></td>
+
+                                <!--                                <td class="text-center">-->
+                                <!--                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>-->
+                                <!--                                </td>-->
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    // Отримуємо радіокнопки
+    var radioButtons = document.querySelectorAll('input[name="vbtn-radio"]');
+
+    // Отримуємо блоки editSchedule, editBuses та editCompanies
+    var editSchedule = document.getElementById('editSchedules');
+    var editBuses = document.getElementById('editBuses');
+    var editCompanies = document.getElementById('editCompanies');
+    var editRoute = document.getElementById('editRoute');
+    var editStops = document.getElementById('editStops');
+    var editRouteStop = document.getElementById('editRouteStop');
+    var editOrders = document.getElementById('editOrders');
+
+    // Функція, яка відображає блок editSchedule
+    function showEditSchedule() {
+        editSchedule.style.display = 'block';
+        editBuses.style.display = 'none';
+        editCompanies.style.display = 'none';
+        editRoute.style.display = 'none';
+        editStops.style.display = 'none';
+        editRouteStop.style.display = 'none';
+        editOrders.style.display = 'none';
+    }
+
+    // Функція, яка відображає блок editBuses
+    function showEditBuses() {
+        editSchedule.style.display = 'none';
+        editBuses.style.display = 'block';
+        editCompanies.style.display = 'none';
+        editRoute.style.display = 'none';
+        editStops.style.display = 'none';
+        editRouteStop.style.display = 'none';
+        editOrders.style.display = 'none';
+    }
+
+    // Функція, яка відображає блок editCompanies
+    function showEditCompanies() {
+        editSchedule.style.display = 'none';
+        editBuses.style.display = 'none';
+        editCompanies.style.display = 'block';
+        editRoute.style.display = 'none';
+        editStops.style.display = 'none';
+        editRouteStop.style.display = 'none';
+        editOrders.style.display = 'none';
+    }
+
+    function showEditRoutes() {
+        editSchedule.style.display = 'none';
+        editBuses.style.display = 'none';
+        editCompanies.style.display = 'none';
+        editRoute.style.display = 'block';
+        editStops.style.display = 'none';
+        editRouteStop.style.display = 'none';
+        editOrders.style.display = 'none';
+    }
+    function showEditStops() {
+        editSchedule.style.display = 'none';
+        editBuses.style.display = 'none';
+        editCompanies.style.display = 'none';
+        editRoute.style.display = 'none';
+        editStops.style.display = 'block';
+        editRouteStop.style.display = 'none';
+        editOrders.style.display = 'none';
+    }
+    function showEditRoutesStops() {
+        editSchedule.style.display = 'none';
+        editBuses.style.display = 'none';
+        editCompanies.style.display = 'none';
+        editRoute.style.display = 'none';
+        editStops.style.display = 'none';
+        editRouteStop.style.display = 'block';
+        editOrders.style.display = 'none';
+    }
+    function showEditOrders() {
+        editSchedule.style.display = 'none';
+        editBuses.style.display = 'none';
+        editCompanies.style.display = 'none';
+        editRoute.style.display = 'none';
+        editRoute.style.display = 'none';
+        editRouteStop.style.display = 'none';
+        editOrders.style.display = 'block';
+    }
+
+    // Додаємо обробник подій для кожної радіокнопки
+    for (var i = 0; i < radioButtons.length; i++) {
+        radioButtons[i].addEventListener('change', function () {
+            if (this.id === 'vbtn-radio1' && this.checked) {
+                showEditSchedule();
+            } else if (this.id === 'vbtn-radio2' && this.checked) {
+                showEditBuses();
+            } else if (this.id === 'vbtn-radio3' && this.checked) {
+                showEditCompanies();
+            }
+            else if (this.id === 'vbtn-radio4' && this.checked) {
+                showEditRoutes();
+            }
+            else if (this.id === 'vbtn-radio5' && this.checked) {
+                showEditStops()
+            }
+            else if (this.id === 'vbtn-radio6' && this.checked) {
+                showEditRoutesStops();
+            }
+            else if (this.id === 'vbtn-radio7' && this.checked) {
+                showEditOrders();
+            }
+        });
+    }
+
+    // За допомогою цього коду встановлюється початковий стан відображення
+    // відповідно до стану першої радіокнопки
+    if (radioButtons[0].checked) {
+        showEditSchedule();
+    }
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+<!--<footer class="py-5 bg-dark">-->
+<!--    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>-->
+<!--</footer>-->
+</html>
