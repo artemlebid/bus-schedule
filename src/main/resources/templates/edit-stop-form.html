@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Налаштування</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Станція смт.Чернівці</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/schedule}">Головна</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            <form class="d-flex" th:action="@{/schedule/search}" th:object="${search}" role="search"  method="get">
+                <input th:if="${#fields.hasErrors('searchLine')}" th:errors="*{searchLine}" class="form-control is-invalid me-2" list="datalistOptions" type="search" placeholder="Куди їдемо?" aria-label="Search" th:field="*{searchLine}">
+                <input th:unless="${#fields.hasErrors('searchLine')}" class="form-control me-2" type="search" list="datalistOptions" placeholder="Куди їдемо?" aria-label="Search" th:field="*{searchLine}">
+                <datalist id="datalistOptions">
+                    <option value="Вінниця">
+                    <option value="Могилів">
+                    <option value="Вапнярка">
+                    <option value="Ямпіль">
+                    <option value="Березівка">
+                    <option value="Джурин">
+                    <option value="Рахни">
+                    <option value="Немирів">
+                    <option value="Моївка">
+                    <option value="Сокіл">
+                    <option value="Гонівка">
+                    <option value="Чубарівка">
+                </datalist>
+                <button class="btn btn-outline-success" type="submit">Пошук</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <br>
+    <div>
+        <p class="fs-2 text-center" th:if="${model == null}">Додавання нової зупинки:</p>
+        <p class="fs-2 text-center" th:if="${model != null}">Редагування зупинки:</p>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6 card card-body">
+            <form class="row g-3 needs-validation" novalidate>
+                <div class="col-md-12">
+                    <label for="validationCustom01" class="form-label">Назва</label>
+                    <input type="text" class="form-control" id="validationCustom01" value="" required>
+                    <div class="valid-feedback">
+                        Виглядає чудово!
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Зберегти</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+<!--<footer class="py-5 bg-dark">-->
+<!--    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>-->
+<!--</footer>-->
+</html>

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -60,5 +59,68 @@ public class AdminController {
         model.addAttribute("routesStops", routesStops);
         model.addAttribute("orders", orders);
         return "buses-adminpanel";
+    }
+
+    @GetMapping("/admin-panel/new/company")
+    public String addCompany(Model model){
+        LocalDateTime currentTime = LocalDateTime.now();
+        SearchDto search = new SearchDto();
+        model.addAttribute("time", currentTime);
+        model.addAttribute("search", search);
+
+        return "edit-company-form";
+    }
+
+    @GetMapping("/admin-panel/new/bus")
+    public String addBus(Model model){
+        LocalDateTime currentTime = LocalDateTime.now();
+        SearchDto search = new SearchDto();
+        List<Company> companies = companyService.findAllCompanies();
+
+        model.addAttribute("time", currentTime);
+        model.addAttribute("search", search);
+        model.addAttribute("companies", companies);
+
+        return "edit-bus-form";
+    }
+
+    @GetMapping("/admin-panel/new/stop")
+    public String addStop(Model model){
+        LocalDateTime currentTime = LocalDateTime.now();
+        SearchDto search = new SearchDto();
+        model.addAttribute("time", currentTime);
+        model.addAttribute("search", search);
+
+        return "edit-stop-form";
+    }
+
+    @GetMapping("/admin-panel/new/route")
+    public String addRoute(Model model){
+        LocalDateTime currentTime = LocalDateTime.now();
+        SearchDto search = new SearchDto();
+        model.addAttribute("time", currentTime);
+        model.addAttribute("search", search);
+
+        return "edit-route-form";
+    }
+
+    @GetMapping("/admin-panel/new/routestop")
+    public String addRouteStop(Model model){
+        LocalDateTime currentTime = LocalDateTime.now();
+        SearchDto search = new SearchDto();
+        model.addAttribute("time", currentTime);
+        model.addAttribute("search", search);
+
+        return "edit-routestop-form";
+    }
+
+    @GetMapping("/admin-panel/new/schedule")
+    public String addSchedule(Model model){
+        LocalDateTime currentTime = LocalDateTime.now();
+        SearchDto search = new SearchDto();
+        model.addAttribute("time", currentTime);
+        model.addAttribute("search", search);
+
+        return "edit-schedule-form";
     }
 }
