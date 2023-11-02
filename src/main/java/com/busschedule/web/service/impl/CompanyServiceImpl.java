@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -18,8 +19,23 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public void saveCompany(Company company){
+        companyRepository.save(company);
+    }
+
+    @Override
     public List<Company> findAllCompanies() {
         List<Company> allCompanies = companyRepository.findAll();
         return allCompanies;
+    }
+
+    @Override
+    public Company findCompanyById(Long id) {
+        Company company = new Company();
+        Optional<Company> optionalCompany = companyRepository.findById(id);
+        if(optionalCompany.isPresent()){
+            company = optionalCompany.get();
+        }
+        return company;
     }
 }

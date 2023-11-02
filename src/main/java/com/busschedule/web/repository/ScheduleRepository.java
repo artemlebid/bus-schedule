@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    Schedule findScheduleById(Long id);
+    Optional<Schedule> findScheduleById(Long id);
     @Query("SELECT c FROM Schedule c where c.departureTime > :departureTime")
     List<Schedule> findSchedulesByDepartureTime(LocalDateTime departureTime);
 

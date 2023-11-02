@@ -87,7 +87,7 @@
                 <div class="collapse show" id="editSchedules" style="">
                     <div class="card card-body">
                         <div class="col-md-2">
-                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{/admin-panel/new/schedule}">Додати</a>
                         </div>
                         <table class="table align-middle text-center">
                             <thead>
@@ -115,7 +115,7 @@
                                 <td th:text="${schedule.accessibility}"></td>
                                 <td th:text="${schedule.seats}"></td>
                                 <td class="text-center">
-                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
                                     <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
                                     <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-bs-whatever="${schedule.route.name}" th:data-bs-routeid="${schedule.route.id}">Купити</a>-->
                                 </td>
@@ -132,7 +132,7 @@
                                 <td th:text="${schedule.accessibility}"></td>
                                 <td th:text="${schedule.seats}"></td>
                                 <td>
-                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
                                     <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
                                     <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Купити</a>-->
                                 </td>
@@ -150,7 +150,7 @@
                                 <td th:text="${schedule.accessibility}"></td>
                                 <td th:text="${schedule.seats}"></td>
                                 <td>
-                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
                                     <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
                                     <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Купити</a>-->
                                 </td>
@@ -163,7 +163,7 @@
                 <div class="collapse show" id="editBuses" style="">
                     <div class="card card-body">
                         <div class="col-md-2">
-                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{/admin-panel/new/bus}">Додати</a>
                         </div>
                         <table class="table align-middle text-center">
                             <thead>
@@ -180,7 +180,7 @@
                                 <td th:text="${bus.licensePlate}"></td>
                                 <td th:text="${bus.company.name}"></td>
                                 <td class="text-center">
-                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/bus/{id}(id=${bus.id})}">Редагувати</a>
                                     <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
                                     <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-bs-whatever="${schedule.route.name}" th:data-bs-routeid="${schedule.route.id}">Купити</a>-->
                                 </td>
@@ -193,7 +193,7 @@
                 <div class="collapse show" id="editCompanies" style="">
                     <div class="card card-body">
                         <div class="col-md-2">
-                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{/admin-panel/new/company}">Додати</a>
                         </div>
                         <table class="table align-middle text-center">
                             <thead>
@@ -214,7 +214,7 @@
                                 <!--                                        </select>-->
                                 <!--                                    </td>-->
                                 <td class="text-center">
-                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/company/{id}(id=${company.id})}">Редагувати</a>
                                     <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
                                 </td>
                             </tr>
@@ -226,7 +226,7 @@
                 <div class="collapse show" id="editRoute" style="">
                     <div class="card card-body">
                         <div class="col-md-2">
-                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{/admin-panel/new/route}">Додати</a>
                         </div>
                         <table class="table align-middle text-center">
                             <thead>
@@ -239,7 +239,7 @@
                             <tr th:each="route : ${routes}">
                                 <td th:text="${route.name}"></td>
                                 <td class="text-center">
-                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/route/{id}(id=${route.id})}">Редагувати</a>
                                     <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
                                 </td>
                             </tr>
@@ -251,7 +251,7 @@
                 <div class="collapse show" id="editStops" style="">
                     <div class="card card-body">
                         <div class="col-md-2">
-                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{/admin-panel/new/stop}">Додати</a>
                         </div>
                         <table class="table align-middle text-center">
                             <thead>
@@ -265,7 +265,7 @@
                                 <td th:text="${stop.name}"></td>
 
                                 <td class="text-center">
-                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/stop/{id}(id=${stop.id})}">Редагувати</a>
                                     <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
                                 </td>
                             </tr>
@@ -277,7 +277,7 @@
                 <div class="collapse show" id="editRouteStop" style="">
                     <div class="card card-body">
                         <div class="col-md-2">
-                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{#}">Додати</a>
+                            <a class="btn btn-outline-primary flex-shrink-0" th:href="@{/admin-panel/new/routestop}">Додати</a>
                         </div>
                         <table class="table align-middle text-center">
                             <thead>
@@ -301,7 +301,7 @@
                                 <td th:text="${rs.departureTime}"></td>
 
                                 <td class="text-center">
-                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{#}">Редагувати</a>
+                                    <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/routestop/{routeId}/{stopId}(routeId=${rs.route.id}, stopId=${rs.stop.id})}">Редагувати</a>
                                     <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
                                 </td>
                             </tr>

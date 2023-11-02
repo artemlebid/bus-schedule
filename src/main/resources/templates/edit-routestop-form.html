@@ -62,65 +62,57 @@
 <div class="container">
     <br>
     <div>
-        <p class="fs-2 text-center" th:if="${model == null}">Додавання залежності Маршрут-Зупинка:</p>
-        <p class="fs-2 text-center" th:if="${model != null}">Редагування залежності Маршрут-Зупинка:</p>
+        <p class="fs-2 text-center" th:if="${routesStops.price == null}">Додавання залежності Маршрут-Зупинка:</p>
+        <p class="fs-2 text-center" th:if="${routesStops.price != null}">Редагування залежності Маршрут-Зупинка:</p>
     </div>
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6 card card-body">
-            <form class="row g-3 needs-validation" novalidate>
+            <form class="row g-3 needs-validation" method="post" th:action="@{/admin-panel/new/routestop}" th:object="${routesStops}" novalidate>
+<!--                <input type="text" class="form-control" id="validationCustom0" th:value="${routesStops.id}" th:field="*{id.routeId}" hidden>-->
+<!--                <input type="text" class="form-control" id="validationCustom00" th:value="${company.id}" th:field="*{id.stopId}" hidden>-->
                 <div class="col-md-12">
                     <label for="exampleRouteList" class="form-label">Маршрут</label>
-                    <input class="form-control" list="routeList" id="exampleRouteList" placeholder="Введіть маршрут">
-                    <datalist id="routeList">
-                        <option value="San Francisco">
-                        <option value="New York">
-                        <option value="Seattle">
-                        <option value="Los Angeles">
-                        <option value="Chicago">
-                    </datalist>
+                    <select class="form-select" id="exampleRouteList" th:field="*{route}" aria-label="Default select example">
+                        <option th:each="route : ${routes}" th:value="${route.id}" th:text="${route.name}">
+                    </select>
                     <div class="valid-feedback">
                         Виглядає чудово!
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="exampleStopList" class="form-label">Зупинка</label>
-                    <input class="form-control" list="stopList" id="exampleStopList" placeholder="Введіть зупинку">
-                    <datalist id="stopList">
-                        <option value="San Francisco">
-                        <option value="New York">
-                        <option value="Seattle">
-                        <option value="Los Angeles">
-                        <option value="Chicago">
-                    </datalist>
+                    <select class="form-select" id="exampleStopList" th:field="*{stop}" aria-label="Default select example">
+                        <option th:each="stop : ${stops}" th:value="${stop.id}" th:text="${stop.name}">
+                    </select>
                     <div class="valid-feedback">
                         Виглядає чудово!
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="validationCustom01" class="form-label">Номер зупинки</label>
-                    <input type="text" class="form-control" id="validationCustom01" value="" required>
+                    <input type="text" class="form-control" id="validationCustom01" th:field="*{stopNumber}" required>
                     <div class="valid-feedback">
                         Виглядає чудово!
                     </div>
                 </div>
                 <div class="col-md-12">
                     <label for="validationCustom02" class="form-label">Ціна квитка</label>
-                    <input type="text" class="form-control" id="validationCustom02" value="" required>
+                    <input type="text" class="form-control" id="validationCustom02" th:field="*{price}" required>
                     <div class="valid-feedback">
                         Виглядає чудово!
                     </div>
                 </div>
                 <div class="col-md-12">
                     <label for="validationCustom03" class="form-label">Час прибуття</label>
-                    <input type="text" class="form-control" id="validationCustom03" value="" placeholder="Введіть час (год:хв:сек)" required>
+                    <input type="text" class="form-control" id="validationCustom03" th:field="*{arrivalTime}" placeholder="Введіть час (год:хв:сек)" required>
                     <div class="valid-feedback">
                         Виглядає чудово!
                     </div>
                 </div>
                 <div class="col-md-12">
                     <label for="validationCustom04" class="form-label">Час відправки</label>
-                    <input type="text" class="form-control" id="validationCustom04" value="" placeholder="Введіть час (год:хв:сек)" required>
+                    <input type="text" class="form-control" id="validationCustom04" th:field="*{departureTime}" placeholder="Введіть час (год:хв:сек)" required>
                     <div class="valid-feedback">
                         Виглядає чудово!
                     </div>

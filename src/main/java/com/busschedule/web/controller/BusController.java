@@ -35,12 +35,12 @@ public class BusController {
         for(Schedule schedule : overdueSchedule){
             LocalDateTime departureTime = schedule.getDepartureTime();
             LocalDateTime arrivalTime = schedule.getArrivalTime();
-            schedule.setDepartureTime(departureTime.plusDays(2));
-            schedule.setArrivalTime(arrivalTime.plusDays(2));
+            schedule.setDepartureTime(departureTime.plusDays(3));
+            schedule.setArrivalTime(arrivalTime.plusDays(3));
             schedule.setSeats(30);
             schedule.setAccessibility("У продажі");
         }
-        scheduleService.saveSchedule(overdueSchedule);
+        scheduleService.saveScheduleList(overdueSchedule);
 
         List<Schedule> scheduleToday = scheduleService.findScheduleToday();
         List<Schedule> scheduleTomorrow = scheduleService.findScheduleTomorrow();

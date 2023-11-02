@@ -1,15 +1,13 @@
 package com.busschedule.web.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,11 +17,10 @@ public class Stop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String name;
     @OneToMany(
-            mappedBy = "stop",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            mappedBy = "stop"
     )
     private List<RoutesStops> routesStops;
 }

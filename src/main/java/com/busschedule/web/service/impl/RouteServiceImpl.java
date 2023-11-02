@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RouteServiceImpl implements RouteService {
@@ -18,8 +19,25 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    public void saveRoute(Route route) {
+        routeRepository.save(route);
+    }
+
+    @Override
     public List<Route> findAllRoutes() {
         List<Route> allRoutes = routeRepository.findAll();
         return allRoutes;
+    }
+
+    @Override
+    public Route findRouteById(Long id) {
+        Route route = new Route();
+        Optional<Route> optionalRoute = routeRepository.findById(id);
+
+        if(optionalRoute.isPresent()){
+            route = optionalRoute.get();
+        }
+
+        return route;
     }
 }

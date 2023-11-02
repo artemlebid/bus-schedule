@@ -9,32 +9,43 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
-    private ScheduleRepository repository;
+    private ScheduleRepository scheduleRepository;
 
     @Autowired
-    public ScheduleServiceImpl(ScheduleRepository repository) {
-        this.repository = repository;
+    public ScheduleServiceImpl(ScheduleRepository scheduleRepository) {
+        this.scheduleRepository = scheduleRepository;
     }
 
     @Override
     public Schedule findScheduleById(Long id) {
-        Schedule schedule = repository.findScheduleById(id);
+        Schedule schedule = new Schedule();
+        Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(id);
+
+        if(optionalSchedule.isPresent()){
+            schedule = optionalSchedule.get();
+        }
         return schedule;
     }
 
     @Override
-    public void saveSchedule(List<Schedule> schedules) {
-        repository.saveAll(schedules);
+    public void saveSchedule(Schedule schedule) {
+        scheduleRepository.save(schedule);
+    }
+
+    @Override
+    public void saveScheduleList(List<Schedule> schedules) {
+        scheduleRepository.saveAll(schedules);
     }
 
     @Override
     public List<Schedule> findScheduleToday() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime endOfDay = currentDateTime.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
-        List<Schedule> scheduleToday = repository.findScheduleByTimeInterval(currentDateTime, endOfDay);
+        List<Schedule> scheduleToday = scheduleRepository.findScheduleByTimeInterval(currentDateTime, endOfDay);
         return scheduleToday;
     }
 
@@ -43,7 +54,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime startOfNextDay = currentDateTime.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
         LocalDateTime endOfNextDay = startOfNextDay.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
-        List<Schedule> scheduleTomorrow = repository.findScheduleByTimeInterval(startOfNextDay, endOfNextDay);
+        List<Schedule> scheduleTomorrow = scheduleRepository.findScheduleByTimeInterval(startOfNextDay, endOfNextDay);
         return scheduleTomorrow;
     }
 
@@ -52,14 +63,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime startOfNextDay = currentDateTime.toLocalDate().plusDays(2).atTime(LocalTime.MIDNIGHT);
         LocalDateTime endOfNextDay = startOfNextDay.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
-        List<Schedule> scheduleAfterTomorrow = repository.findScheduleByTimeInterval(startOfNextDay, endOfNextDay);
+        List<Schedule> scheduleAfterTomorrow = scheduleRepository.findScheduleByTimeInterval(startOfNextDay, endOfNextDay);
         return scheduleAfterTomorrow;
     }
 
     @Override
     public List<Schedule> findOverdueSchedule() {
         LocalDateTime currentDateTime = LocalDateTime.now();
-        List<Schedule> overdueSchedule = repository.findOverdueSchedule(currentDateTime);
+        List<Schedule> overdueSchedule = scheduleRepository.findOverdueSchedule(currentDateTime);
         return overdueSchedule;
     }
 
@@ -68,7 +79,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime endOfDay = currentDateTime.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
 
-        List<Schedule> scheduleToday = repository.findAllByStopsAndTimeForSearch(stopName, currentDateTime, endOfDay);
+        List<Schedule> scheduleToday = scheduleRepository.findAllByStopsAndTimeForSearch(stopName, currentDateTime, endOfDay);
         return scheduleToday;
     }
 
@@ -77,7 +88,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime startOfNextDay = currentDateTime.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
         LocalDateTime endOfNextDay = startOfNextDay.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
-        List<Schedule> scheduleTomorrow = repository.findAllByStopsAndTimeForSearch(stopName, startOfNextDay, endOfNextDay);
+        List<Schedule> scheduleTomorrow = scheduleRepository.findAllByStopsAndTimeForSearch(stopName, startOfNextDay, endOfNextDay);
         return scheduleTomorrow;
     }
 
@@ -86,7 +97,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime startOfNextDay = currentDateTime.toLocalDate().plusDays(2).atTime(LocalTime.MIDNIGHT);
         LocalDateTime endOfNextDay = startOfNextDay.toLocalDate().plusDays(2).atTime(LocalTime.MIDNIGHT);
-        List<Schedule> scheduleAfterTomorrow = repository.findAllByStopsAndTimeForSearch(stopName, startOfNextDay, endOfNextDay);
+        List<Schedule> scheduleAfterTomorrow = scheduleRepository.findAllByStopsAndTimeForSearch(stopName, startOfNextDay, endOfNextDay);
         return scheduleAfterTomorrow;
     }
 }

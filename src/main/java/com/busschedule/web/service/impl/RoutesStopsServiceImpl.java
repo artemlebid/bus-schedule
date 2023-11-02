@@ -6,6 +6,7 @@ import com.busschedule.web.service.RoutesStopsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -18,14 +19,35 @@ public class RoutesStopsServiceImpl implements RoutesStopsService {
     }
 
     @Override
+    public void save(RoutesStops routesStops) {
+        routesStopsRepository.save(routesStops);
+    }
+
+    @Override
+    public void customSave(LocalTime arrivalTime, LocalTime departureTime, Double price, Integer stopNumber, Long stopId, Long routeId) {
+        RoutesStops routesStops = routesStopsRepository.findByRouteIdAndStopId(routeId, stopId);
+        if(routesStops != null){
+            routesStopsRepository.customUpdate(arrivalTime, departureTime, price, stopNumber, stopId, routeId);
+        }
+        else{
+            routesStopsRepository.customSave(arrivalTime, departureTime, price, stopNumber, stopId, routeId);
+        }
+    }
+
+    @Override
+    public void customUpdate(LocalTime arrivalTime, LocalTime departureTime, Double price, Integer stopNumber, Long stopId, Long routeId) {
+        routesStopsRepository.customUpdate(arrivalTime, departureTime, price, stopNumber, stopId, routeId);
+    }
+
+    @Override
     public List<RoutesStops> findAllSortedRoutesStops() {
         List<RoutesStops> allSortedRoutesStops = routesStopsRepository.findAllSorted();
         return allSortedRoutesStops;
     }
 
     @Override
-    public List<RoutesStops> findAllRoutesStops() {
-        List<RoutesStops> allRouteStops = routesStopsRepository.findAll();
-        return allRouteStops;
+    public RoutesStops findByRouteIdAndStopId(Long routeId, Long stopId) {
+        RoutesStops routesStops = routesStopsRepository.findByRouteIdAndStopId(routeId, stopId);
+        return routesStops;
     }
 }

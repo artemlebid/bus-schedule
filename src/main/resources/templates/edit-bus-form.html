@@ -62,37 +62,42 @@
 <div class="container">
     <br>
     <div>
-        <p class="fs-2 text-center" th:if="${model == null}">Додавання нового автобусу:</p>
-        <p class="fs-2 text-center" th:if="${model != null}">Редагування автобусу:</p>
+        <p class="fs-2 text-center" th:if="${bus.id == null}">Додавання нового автобусу:</p>
+        <p class="fs-2 text-center" th:if="${bus.id != null}">Редагування автобусу:</p>
     </div>
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6 card card-body">
-            <form class="row g-3 needs-validation" novalidate>
+            <form class="row g-3 needs-validation" method="post" th:action="@{/admin-panel/new/bus}" th:object="${bus}" novalidate>
+                <input type="text" class="form-control" id="validationCustom00" th:value="${bus.id}" th:field="*{id}" hidden>
                 <div class="col-md-6">
                     <label for="validationCustom01" class="form-label">Марка</label>
-                    <input type="text" class="form-control" id="validationCustom01" value="" required>
+                    <input type="text" class="form-control" id="validationCustom01" th:field="*{name}" required>
                     <div class="valid-feedback">
                         Виглядає чудово!
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="validationCustom02" class="form-label">Держ. номер</label>
-                    <input type="text" class="form-control" id="validationCustom02" value="" required>
+                    <input type="text" class="form-control" id="validationCustom02" th:field="*{licensePlate}" required>
                     <div class="valid-feedback">
                         Виглядає чудово!
                     </div>
                 </div>
                 <div class="col-md-12">
                     <label for="exampleCompanyList" class="form-label">Компанія</label>
-                    <input class="form-control" list="companyList" id="exampleCompanyList" placeholder="Введіть компанію">
-                    <datalist id="companyList">
-                        <option value="San Francisco">
-                        <option value="New York">
-                        <option value="Seattle">
-                        <option value="Los Angeles">
-                        <option value="Chicago">
-                    </datalist>
+<!--                    <input class="form-control" list="companyList" id="exampleCompanyList" th:field="*{company}" placeholder="Введіть компанію">-->
+<!--&lt;!&ndash;                    <datalist id="companyList" th:each="company : ${companies}">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <option th:value="${company.id}"><span th:text="${company.name}"></span></option>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </datalist>&ndash;&gt;-->
+<!--                    <datalist id="companyList">-->
+<!--                        <th:block th:each="company : ${companies}">-->
+<!--                            <option th:value="${company.id}" th:text="${company.name}"></option>-->
+<!--                        </th:block>-->
+<!--                    </datalist>-->
+                    <select class="form-select" id="exampleCompanyList" th:field="*{company}" aria-label="Default select example">
+                        <option th:each="company : ${companies}" th:value="${company.id}" th:text="${company.name}">
+                    </select>
                     <div class="valid-feedback">
                         Виглядає чудово!
                     </div>

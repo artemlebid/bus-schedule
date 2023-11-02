@@ -17,11 +17,11 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class RoutesStops {
     @EmbeddedId
-    private RoutesStopsId id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    private RoutesStopsId id = new RoutesStopsId();
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @MapsId("routeId")
     private Route route;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @MapsId("stopId")
     private Stop stop;
     private Integer stopNumber;
