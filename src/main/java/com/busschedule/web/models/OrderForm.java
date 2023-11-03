@@ -1,11 +1,7 @@
 package com.busschedule.web.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -14,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "orders")
 public class OrderForm {
@@ -27,7 +24,7 @@ public class OrderForm {
     //    @Min(value = 1, message = "Min count of seats should be 1")
     private int countSeats;
     //    @NotEmpty(message = "Payment should not be empty")
-    private Double Payment;
+    private Double payment;
     //    @NotEmpty(message = "Name should not be empty")
 //    @Size(min = 2, max = 30, message = "Name should be from 2 to 30 symbols")
     private String name;

@@ -1,5 +1,7 @@
 package com.busschedule.web.controller;
 
+import com.busschedule.web.dto.OrderFormDto;
+import com.busschedule.web.dto.ScheduleDto;
 import com.busschedule.web.dto.SearchDto;
 import com.busschedule.web.models.OrderForm;
 import com.busschedule.web.models.RoutesStops;
@@ -31,8 +33,8 @@ public class BusController {
     public String scheduleList(Model model){
         LocalDateTime currentTime = LocalDateTime.now();
 
-        List<Schedule> overdueSchedule = scheduleService.findOverdueSchedule();
-        for(Schedule schedule : overdueSchedule){
+        List<ScheduleDto> overdueSchedule = scheduleService.findOverdueSchedule();
+        for(ScheduleDto schedule : overdueSchedule){
             LocalDateTime departureTime = schedule.getDepartureTime();
             LocalDateTime arrivalTime = schedule.getArrivalTime();
             schedule.setDepartureTime(departureTime.plusDays(3));
@@ -42,9 +44,9 @@ public class BusController {
         }
         scheduleService.saveScheduleList(overdueSchedule);
 
-        List<Schedule> scheduleToday = scheduleService.findScheduleToday();
-        List<Schedule> scheduleTomorrow = scheduleService.findScheduleTomorrow();
-        List<Schedule> scheduleAfterTomorrow = scheduleService.findScheduleAfterTomorrow();
+        List<ScheduleDto> scheduleToday = scheduleService.findScheduleToday();
+        List<ScheduleDto> scheduleTomorrow = scheduleService.findScheduleTomorrow();
+        List<ScheduleDto> scheduleAfterTomorrow = scheduleService.findScheduleAfterTomorrow();
         SearchDto search = new SearchDto();
 
         model.addAttribute("time", currentTime);
@@ -58,19 +60,19 @@ public class BusController {
 
     @GetMapping("/schedule/{scheduleId}")
     public String scheduleDetail(@PathVariable("scheduleId") Long id, Model model){
-        Schedule schedule = scheduleService.findScheduleById(id);
-        List<RoutesStops> routesStops = schedule.getRoute().getRoutesStops();
+        ScheduleDto schedule = scheduleService.findScheduleById(id);
+        List<RoutesStops> routesStops = schedule.getRoute().getRoutesStops(); //????????????????????????????/
         routesStops.sort((o1,o2) -> o1.getStopNumber() - o2.getStopNumber());
         SearchDto searchDto = new SearchDto();
         model.addAttribute("search", searchDto);
         model.addAttribute("schedule", schedule);
         model.addAttribute("routesStops", routesStops);
-        model.addAttribute("orderForm", new OrderForm());
+        model.addAttribute("orderForm", new OrderFormDto());
 
         return "buses-detail";
     }
     @PostMapping("/schedule/order")
-    public String scheduleOrder(@ModelAttribute("orderForm") OrderForm orderForm, BindingResult result, @ModelAttribute("schedule")Schedule schedule){
+    public String scheduleOrder(@ModelAttribute("orderForm") OrderFormDto orderForm, BindingResult result, @ModelAttribute("schedule")Schedule schedule){
         if(result.hasErrors()){
             return "buses-error";
         }
@@ -98,9 +100,9 @@ public class BusController {
         }
 
         LocalDateTime currentTime = LocalDateTime.now();
-        List<Schedule> scheduleToday = scheduleService.findAllByStopsAndTimeForSearchToday(search.getSearchLine());
-        List<Schedule> scheduleTomorrow = scheduleService.findAllByStopsAndTimeForSearchTomorrow(search.getSearchLine());
-        List<Schedule> scheduleAfterTomorrow = scheduleService.findAllByStopsAndTimeForSearchAfterTomorrow(search.getSearchLine());
+        List<ScheduleDto> scheduleToday = scheduleService.findAllByStopsAndTimeForSearchToday(search.getSearchLine());
+        List<ScheduleDto> scheduleTomorrow = scheduleService.findAllByStopsAndTimeForSearchTomorrow(search.getSearchLine());
+        List<ScheduleDto> scheduleAfterTomorrow = scheduleService.findAllByStopsAndTimeForSearchAfterTomorrow(search.getSearchLine());
 
         model.addAttribute("time", currentTime);
         model.addAttribute("scheduleToday", scheduleToday);

@@ -1,5 +1,6 @@
 package com.busschedule.web.service.impl;
 
+import com.busschedule.web.dto.RoutesStopsDto;
 import com.busschedule.web.models.RoutesStops;
 import com.busschedule.web.repository.RoutesStopsRepository;
 import com.busschedule.web.service.RoutesStopsService;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RoutesStopsServiceImpl implements RoutesStopsService {
@@ -19,8 +21,8 @@ public class RoutesStopsServiceImpl implements RoutesStopsService {
     }
 
     @Override
-    public void save(RoutesStops routesStops) {
-        routesStopsRepository.save(routesStops);
+    public void save(RoutesStopsDto routesStops) {
+        routesStopsRepository.save(mapToRoutesStops(routesStops));
     }
 
     @Override
@@ -40,14 +42,38 @@ public class RoutesStopsServiceImpl implements RoutesStopsService {
     }
 
     @Override
-    public List<RoutesStops> findAllSortedRoutesStops() {
+    public List<RoutesStopsDto> findAllSortedRoutesStops() {
         List<RoutesStops> allSortedRoutesStops = routesStopsRepository.findAllSorted();
-        return allSortedRoutesStops;
+        return allSortedRoutesStops.stream().map(routesStops -> mapToRoutesStopsDto(routesStops)).collect(Collectors.toList());
     }
 
     @Override
-    public RoutesStops findByRouteIdAndStopId(Long routeId, Long stopId) {
+    public RoutesStopsDto findByRouteIdAndStopId(Long routeId, Long stopId) {
         RoutesStops routesStops = routesStopsRepository.findByRouteIdAndStopId(routeId, stopId);
+        return mapToRoutesStopsDto(routesStops);
+    }
+
+    private RoutesStopsDto mapToRoutesStopsDto(RoutesStops routesStops){
+        RoutesStopsDto routesStopsDto = RoutesStopsDto.builder()
+                .arrivalTime(routesStops.getArrivalTime())
+                .departureTime(routesStops.getDepartureTime())
+                .price(routesStops.getPrice())
+                .stopNumber(routesStops.getStopNumber())
+                .stop(routesStops.getStop())
+                .route(routesStops.getRoute())
+                .build();
+        return routesStopsDto;
+    }
+
+    private RoutesStops mapToRoutesStops(RoutesStopsDto routesStopsDto){
+        RoutesStops routesStops = RoutesStops.builder()
+                .arrivalTime(routesStopsDto.getArrivalTime())
+                .departureTime(routesStopsDto.getDepartureTime())
+                .price(routesStopsDto.getPrice())
+                .stopNumber(routesStopsDto.getStopNumber())
+                .stop(routesStopsDto.getStop())
+                .route(routesStopsDto.getRoute())
+                .build();
         return routesStops;
     }
 }

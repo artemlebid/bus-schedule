@@ -1,5 +1,6 @@
 package com.busschedule.web.service.impl;
 
+import com.busschedule.web.dto.CompanyDto;
 import com.busschedule.web.models.Company;
 import com.busschedule.web.repository.CompanyRepository;
 import com.busschedule.web.service.CompanyService;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -19,23 +21,40 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void saveCompany(Company company){
-        companyRepository.save(company);
+    public void saveCompany(CompanyDto company){
+        companyRepository.save(mapToCompany(company));
     }
 
     @Override
-    public List<Company> findAllCompanies() {
+    public List<CompanyDto> findAllCompanies() {
         List<Company> allCompanies = companyRepository.findAll();
-        return allCompanies;
+        return allCompanies.stream().map(company -> mapToCompanyDto(company)).collect(Collectors.toList());
     }
 
     @Override
-    public Company findCompanyById(Long id) {
+    public CompanyDto findCompanyById(Long id) {
         Company company = new Company();
         Optional<Company> optionalCompany = companyRepository.findById(id);
         if(optionalCompany.isPresent()){
             company = optionalCompany.get();
         }
+        return mapToCompanyDto(company);
+    }
+
+    private CompanyDto mapToCompanyDto(Company company){
+        CompanyDto companyDto = CompanyDto.builder()
+                .id(company.getId())
+                .name(company.getName())
+                .build();
+        return companyDto;
+    }
+
+    private Company mapToCompany(CompanyDto companyDto){
+        Company company = Company.builder()
+                .id(companyDto.getId())
+                .name(companyDto.getName())
+                .build();
         return company;
     }
+
 }

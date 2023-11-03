@@ -1,13 +1,13 @@
 package com.busschedule.web.service;
 
+import com.busschedule.web.dto.RoutesStopsDto;
 import com.busschedule.web.models.RoutesStops;
-import org.springframework.data.repository.query.Param;
 
 import java.time.LocalTime;
 import java.util.List;
 
 public interface RoutesStopsService {
-    void save(RoutesStops routesStops);
+    void save(RoutesStopsDto routesStops);
     void customSave(LocalTime arrivalTime,
                     LocalTime departureTime,
                     Double price,
@@ -20,6 +20,6 @@ public interface RoutesStopsService {
                       Integer stopNumber,
                       Long stopId,
                       Long routeId);
-    List<RoutesStops> findAllSortedRoutesStops();
-    RoutesStops findByRouteIdAndStopId(Long routeId,Long stopId);
+    List<RoutesStopsDto> findAllSortedRoutesStops();
+    RoutesStopsDto findByRouteIdAndStopId(Long routeId,Long stopId);
 }

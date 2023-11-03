@@ -1,6 +1,6 @@
 package com.busschedule.web.controller;
 
-import com.busschedule.web.dto.SearchDto;
+import com.busschedule.web.dto.*;
 import com.busschedule.web.models.*;
 import com.busschedule.web.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,15 +41,15 @@ public class AdminController {
     public String adminPanel(Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        List<Schedule> scheduleToday = scheduleService.findScheduleToday();
-        List<Schedule> scheduleTomorrow = scheduleService.findScheduleTomorrow();
-        List<Schedule> scheduleAfterTomorrow = scheduleService.findScheduleAfterTomorrow();
-        List<Bus> buses = busService.findAllBuses();
-        List<Company> companies = companyService.findAllCompanies();
-        List<Route> routes =  routeService.findAllRoutes();
-        List<Stop> stops = stopService.findAllStops();
-        List<RoutesStops> routesStops = routesStopsService.findAllSortedRoutesStops();
-        List<OrderForm> orders = orderService.findAllSortedOrders();
+        List<ScheduleDto> scheduleToday = scheduleService.findScheduleToday();
+        List<ScheduleDto> scheduleTomorrow = scheduleService.findScheduleTomorrow();
+        List<ScheduleDto> scheduleAfterTomorrow = scheduleService.findScheduleAfterTomorrow();
+        List<BusDto> buses = busService.findAllBuses();
+        List<CompanyDto> companies = companyService.findAllCompanies();
+        List<RouteDto> routes =  routeService.findAllRoutes();
+        List<StopDto> stops = stopService.findAllStops();
+        List<RoutesStopsDto> routesStops = routesStopsService.findAllSortedRoutesStops();
+        List<OrderFormDto> orders = orderService.findAllSortedOrders();
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -69,7 +69,7 @@ public class AdminController {
     public String addCompany(Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        Company company = new Company();
+        CompanyDto company = new CompanyDto();
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
         model.addAttribute("company", company);
@@ -78,7 +78,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin-panel/new/company")
-    public String saveCompany(@ModelAttribute("company") Company company){
+    public String saveCompany(@ModelAttribute("company") CompanyDto company){
         companyService.saveCompany(company);
         return "redirect:/admin-panel";
     }
@@ -87,7 +87,7 @@ public class AdminController {
     public String editCompany(@PathVariable("id") Long id, Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        Company company = companyService.findCompanyById(id);
+        CompanyDto company = companyService.findCompanyById(id);
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -100,8 +100,8 @@ public class AdminController {
     public String addBus(Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        List<Company> companies = companyService.findAllCompanies();
-        Bus bus = new Bus();
+        List<CompanyDto> companies = companyService.findAllCompanies();
+        BusDto bus = new BusDto();
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -114,8 +114,8 @@ public class AdminController {
     public String editBus(@PathVariable("id") Long id, Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        List<Company> companies = companyService.findAllCompanies();
-        Bus bus = busService.findBusById(id);
+        List<CompanyDto> companies = companyService.findAllCompanies();
+        BusDto bus = busService.findBusById(id);
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -125,7 +125,7 @@ public class AdminController {
         return "edit-bus-form";
     }
     @PostMapping("/admin-panel/new/bus")
-    public String saveBus(@ModelAttribute("bus") Bus bus){
+    public String saveBus(@ModelAttribute("bus") BusDto bus){
         busService.saveBus(bus);
         return "redirect:/admin-panel";
     }
@@ -134,7 +134,7 @@ public class AdminController {
     public String addStop(Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        Stop stop = new Stop();
+        StopDto stop = new StopDto();
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -147,7 +147,7 @@ public class AdminController {
     public String editStop(@PathVariable("id") Long id, Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        Stop stop = stopService.findStopById(id);
+        StopDto stop = stopService.findStopById(id);
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -157,7 +157,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin-panel/new/stop")
-    public String saveStop(@ModelAttribute("stop") Stop stop){
+    public String saveStop(@ModelAttribute("stop") StopDto stop){
         stopService.saveStop(stop);
         return "redirect:/admin-panel";
     }
@@ -166,7 +166,7 @@ public class AdminController {
     public String addRoute(Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        Route route = new Route();
+        RouteDto route = new RouteDto();
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -178,7 +178,7 @@ public class AdminController {
     public String editRoute(@PathVariable("id") Long id, Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        Route route = routeService.findRouteById(id);
+        RouteDto route = routeService.findRouteById(id);
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -187,7 +187,7 @@ public class AdminController {
         return "edit-route-form";
     }
     @PostMapping("/admin-panel/new/route")
-    public String saveRoute(@ModelAttribute("route") Route route){
+    public String saveRoute(@ModelAttribute("route") RouteDto route){
         routeService.saveRoute(route);
         return "redirect:/admin-panel";
     }
@@ -198,9 +198,9 @@ public class AdminController {
                                 Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        List<Stop> stops = stopService.findAllStops();
-        List<Route> routes = routeService.findAllRoutes();
-        RoutesStops routesStops = routesStopsService.findByRouteIdAndStopId(routeId, stopId);
+        List<StopDto> stops = stopService.findAllStops();
+        List<RouteDto> routes = routeService.findAllRoutes();
+        RoutesStopsDto routesStops = routesStopsService.findByRouteIdAndStopId(routeId, stopId);
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -212,7 +212,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin-panel/new/routestop")
-    public String saveRouteStop(@ModelAttribute("routesStops") RoutesStops routesStops){
+    public String saveRouteStop(@ModelAttribute("routesStops") RoutesStopsDto routesStops){
         LocalTime arrivalTime = routesStops.getArrivalTime();
         LocalTime departureTime = routesStops.getDepartureTime();
         Double price = routesStops.getPrice();
@@ -226,9 +226,9 @@ public class AdminController {
     public String addRouteStop(Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        List<Stop> stops = stopService.findAllStops();
-        List<Route> routes = routeService.findAllRoutes();
-        RoutesStops routesStops = new RoutesStops();
+        List<StopDto> stops = stopService.findAllStops();
+        List<RouteDto> routes = routeService.findAllRoutes();
+        RoutesStopsDto routesStops = new RoutesStopsDto();
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -243,9 +243,9 @@ public class AdminController {
     public String addSchedule(Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        List<Bus> buses = busService.findAllBuses();
-        List<Route> routes = routeService.findAllRoutes();
-        Schedule schedule = new Schedule();
+        List<BusDto> buses = busService.findAllBuses();
+        List<RouteDto> routes = routeService.findAllRoutes();
+        ScheduleDto schedule = new ScheduleDto();
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -260,9 +260,9 @@ public class AdminController {
     public String editSchedule(@PathVariable("id") Long id, Model model){
         LocalDateTime currentTime = LocalDateTime.now();
         SearchDto search = new SearchDto();
-        List<Bus> buses = busService.findAllBuses();
-        List<Route> routes = routeService.findAllRoutes();
-        Schedule schedule = scheduleService.findScheduleById(id);
+        List<BusDto> buses = busService.findAllBuses();
+        List<RouteDto> routes = routeService.findAllRoutes();
+        ScheduleDto schedule = scheduleService.findScheduleById(id);
 
         model.addAttribute("time", currentTime);
         model.addAttribute("search", search);
@@ -273,7 +273,7 @@ public class AdminController {
         return "edit-schedule-form";
     }
     @PostMapping("/admin-panel/new/schedule")
-    public String saveSchedule(@ModelAttribute("schedule") Schedule schedule){
+    public String saveSchedule(@ModelAttribute("schedule") ScheduleDto schedule){
         scheduleService.saveSchedule(schedule);
         return "redirect:/admin-panel";
     }

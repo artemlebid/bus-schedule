@@ -1,5 +1,6 @@
 package com.busschedule.web.service.impl;
 
+import com.busschedule.web.dto.ScheduleDto;
 import com.busschedule.web.models.Schedule;
 import com.busschedule.web.repository.ScheduleRepository;
 import com.busschedule.web.service.ScheduleService;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -21,83 +23,118 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule findScheduleById(Long id) {
+    public ScheduleDto findScheduleById(Long id) {
         Schedule schedule = new Schedule();
         Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(id);
 
         if(optionalSchedule.isPresent()){
             schedule = optionalSchedule.get();
         }
-        return schedule;
+        return mapToScheduleDto(schedule);
     }
 
     @Override
-    public void saveSchedule(Schedule schedule) {
-        scheduleRepository.save(schedule);
+    public void saveSchedule(ScheduleDto schedule) {
+        scheduleRepository.save(mapToSchedule(schedule));
     }
 
     @Override
-    public void saveScheduleList(List<Schedule> schedules) {
-        scheduleRepository.saveAll(schedules);
+    public void saveScheduleList(List<ScheduleDto> schedules) {
+        List<Schedule> scheduleList = schedules.stream().map(scheduleDto -> mapToSchedule(scheduleDto)).collect(Collectors.toList());
+        scheduleRepository.saveAll(scheduleList);
     }
 
     @Override
-    public List<Schedule> findScheduleToday() {
+    public List<ScheduleDto> findScheduleToday() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime endOfDay = currentDateTime.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
         List<Schedule> scheduleToday = scheduleRepository.findScheduleByTimeInterval(currentDateTime, endOfDay);
-        return scheduleToday;
+
+        return scheduleToday.stream().map(schedule -> mapToScheduleDto(schedule)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Schedule> findScheduleTomorrow() {
+    public List<ScheduleDto> findScheduleTomorrow() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime startOfNextDay = currentDateTime.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
         LocalDateTime endOfNextDay = startOfNextDay.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
         List<Schedule> scheduleTomorrow = scheduleRepository.findScheduleByTimeInterval(startOfNextDay, endOfNextDay);
-        return scheduleTomorrow;
+
+        return scheduleTomorrow.stream().map(schedule -> mapToScheduleDto(schedule)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Schedule> findScheduleAfterTomorrow() {
+    public List<ScheduleDto> findScheduleAfterTomorrow() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime startOfNextDay = currentDateTime.toLocalDate().plusDays(2).atTime(LocalTime.MIDNIGHT);
         LocalDateTime endOfNextDay = startOfNextDay.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
         List<Schedule> scheduleAfterTomorrow = scheduleRepository.findScheduleByTimeInterval(startOfNextDay, endOfNextDay);
-        return scheduleAfterTomorrow;
+
+        return scheduleAfterTomorrow.stream().map(schedule -> mapToScheduleDto(schedule)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Schedule> findOverdueSchedule() {
+    public List<ScheduleDto> findOverdueSchedule() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         List<Schedule> overdueSchedule = scheduleRepository.findOverdueSchedule(currentDateTime);
-        return overdueSchedule;
+
+        return overdueSchedule.stream().map(schedule -> mapToScheduleDto(schedule)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Schedule> findAllByStopsAndTimeForSearchToday(String stopName) {
+    public List<ScheduleDto> findAllByStopsAndTimeForSearchToday(String stopName) {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime endOfDay = currentDateTime.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
-
         List<Schedule> scheduleToday = scheduleRepository.findAllByStopsAndTimeForSearch(stopName, currentDateTime, endOfDay);
-        return scheduleToday;
+
+        return scheduleToday.stream().map(schedule -> mapToScheduleDto(schedule)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Schedule> findAllByStopsAndTimeForSearchTomorrow(String stopName) {
+    public List<ScheduleDto> findAllByStopsAndTimeForSearchTomorrow(String stopName) {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime startOfNextDay = currentDateTime.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
         LocalDateTime endOfNextDay = startOfNextDay.toLocalDate().plusDays(1).atTime(LocalTime.MIDNIGHT);
         List<Schedule> scheduleTomorrow = scheduleRepository.findAllByStopsAndTimeForSearch(stopName, startOfNextDay, endOfNextDay);
-        return scheduleTomorrow;
+
+        return scheduleTomorrow.stream().map(schedule -> mapToScheduleDto(schedule)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Schedule> findAllByStopsAndTimeForSearchAfterTomorrow(String stopName) {
+    public List<ScheduleDto> findAllByStopsAndTimeForSearchAfterTomorrow(String stopName) {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime startOfNextDay = currentDateTime.toLocalDate().plusDays(2).atTime(LocalTime.MIDNIGHT);
         LocalDateTime endOfNextDay = startOfNextDay.toLocalDate().plusDays(2).atTime(LocalTime.MIDNIGHT);
         List<Schedule> scheduleAfterTomorrow = scheduleRepository.findAllByStopsAndTimeForSearch(stopName, startOfNextDay, endOfNextDay);
-        return scheduleAfterTomorrow;
+
+        return scheduleAfterTomorrow.stream().map(schedule -> mapToScheduleDto(schedule)).collect(Collectors.toList());
+    }
+
+    private ScheduleDto mapToScheduleDto(Schedule schedule){
+        ScheduleDto scheduleDto = ScheduleDto.builder()
+                .id(schedule.getId())
+                .accessibility(schedule.getAccessibility())
+                .arrivalTime(schedule.getArrivalTime())
+                .departureTime(schedule.getDepartureTime())
+                .price(schedule.getPrice())
+                .seats(schedule.getSeats())
+                .bus(schedule.getBus())
+                .route(schedule.getRoute())
+                .build();
+        return scheduleDto;
+    }
+
+    private Schedule mapToSchedule(ScheduleDto scheduleDto){
+        Schedule schedule = Schedule.builder()
+                .id(scheduleDto.getId())
+                .accessibility(scheduleDto.getAccessibility())
+                .arrivalTime(scheduleDto.getArrivalTime())
+                .departureTime(scheduleDto.getDepartureTime())
+                .price(scheduleDto.getPrice())
+                .seats(scheduleDto.getSeats())
+                .bus(scheduleDto.getBus())
+                .route(scheduleDto.getRoute())
+                .build();
+        return schedule;
     }
 }

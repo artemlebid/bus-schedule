@@ -7,8 +7,10 @@ import lombok.*;
 
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class SearchDto {
     @NotEmpty(message = "")
     private String searchLine;
