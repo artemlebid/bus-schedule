@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface RouteService {
     void saveRoute(RouteDto route);
+    void deleteRoute(Long id);
     List<RouteDto> findAllRoutes();
     RouteDto findRouteById(Long id);
 }

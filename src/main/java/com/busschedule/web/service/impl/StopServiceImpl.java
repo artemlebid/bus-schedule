@@ -26,6 +26,11 @@ public class StopServiceImpl implements StopService {
     }
 
     @Override
+    public void deleteStop(Long id) {
+        stopRepository.deleteById(id);
+    }
+
+    @Override
     public List<StopDto> findAllStops() {
         List<Stop> allStops = stopRepository.findAll();
         return allStops.stream().map(stop -> mapToStopDto(stop)).collect(Collectors.toList());

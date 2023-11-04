@@ -3,7 +3,6 @@ package com.busschedule.web.controller;
 import com.busschedule.web.dto.OrderFormDto;
 import com.busschedule.web.dto.ScheduleDto;
 import com.busschedule.web.dto.SearchDto;
-import com.busschedule.web.models.OrderForm;
 import com.busschedule.web.models.RoutesStops;
 import com.busschedule.web.models.Schedule;
 import com.busschedule.web.service.OrderService;
@@ -80,7 +79,7 @@ public class BusController {
         if(schedule.getSeats() == 0){
             schedule.setAccessibility("Продано!");
         }
-        orderService.save(orderForm);
+        orderService.saveOrder(orderForm);
         return "buses-order";
     }
 

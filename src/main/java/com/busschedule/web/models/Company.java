@@ -20,6 +20,6 @@ public class Company {
     private Long id;
     @Column(unique = true)
     private String name;
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Bus> bus;
 }

@@ -32,8 +32,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void save(OrderFormDto orderForm) {
+    public void saveOrder(OrderFormDto orderForm) {
         repository.save(mapToOrderForm(orderForm));
+    }
+
+    @Override
+    public void deleteOrder(Long id) {
+        repository.deleteById(id);
     }
 
     private OrderFormDto mapToOrderFormDto(OrderForm orderForm){

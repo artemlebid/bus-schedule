@@ -8,6 +8,7 @@ import java.util.List;
 public interface ScheduleService {
     ScheduleDto findScheduleById(Long id);
     void saveSchedule(ScheduleDto schedule);
+    void deleteSchedule(Long id);
     void saveScheduleList(List<ScheduleDto> schedules);
     List<ScheduleDto> findScheduleToday();
     List<ScheduleDto> findScheduleTomorrow();

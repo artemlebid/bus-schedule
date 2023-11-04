@@ -20,7 +20,8 @@ public class Stop {
     @Column(unique = true)
     private String name;
     @OneToMany(
-            mappedBy = "stop"
+            mappedBy = "stop",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
     )
     private List<RoutesStops> routesStops;
 }

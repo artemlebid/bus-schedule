@@ -37,7 +37,7 @@ public class OrderForm {
     //    @NotEmpty(message = "Email should not be empty")
 //    @Email(message = "Incorrect email")
     private String email;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
     @CreationTimestamp

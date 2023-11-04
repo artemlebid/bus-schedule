@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface BusService {
     void saveBus(BusDto bus);
+    void deleteBus(Long id);
     List<BusDto> findAllBuses();
     BusDto findBusById(Long id);
 }

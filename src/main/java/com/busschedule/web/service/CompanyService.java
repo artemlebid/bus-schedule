@@ -10,4 +10,5 @@ public interface CompanyService {
     List<CompanyDto> findAllCompanies();
     CompanyDto findCompanyById(Long id);
     void saveCompany(CompanyDto company);
+    void deleteCompany(Long id);
 }

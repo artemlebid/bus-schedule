@@ -19,9 +19,12 @@ public class Bus {
     private String name;
     @Column(unique = true)
     private String licensePlate;
-    @OneToMany(mappedBy = "bus")
+    @OneToMany(
+            mappedBy = "bus",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
     private List<Schedule> schedule;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "company_id")
     private Company company;
 }

@@ -26,6 +26,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public void deleteCompany(Long id) {
+        companyRepository.deleteById(id);
+    }
+
+    @Override
     public List<CompanyDto> findAllCompanies() {
         List<Company> allCompanies = companyRepository.findAll();
         return allCompanies.stream().map(company -> mapToCompanyDto(company)).collect(Collectors.toList());

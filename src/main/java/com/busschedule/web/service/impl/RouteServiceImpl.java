@@ -26,6 +26,11 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    public void deleteRoute(Long id) {
+        routeRepository.deleteById(id);
+    }
+
+    @Override
     public List<RouteDto> findAllRoutes() {
         List<Route> allRoutes = routeRepository.findAll();
         return allRoutes.stream().map(route -> mapToRouteDto(route)).collect(Collectors.toList());

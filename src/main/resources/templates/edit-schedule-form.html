@@ -68,7 +68,7 @@
   <div class="row">
     <div class="col-3"></div>
     <div class="col-6 card card-body">
-      <form class="row g-3 needs-validation" method="post" th:action="@{/admin-panel/new/schedule}" th:object="${schedule}" novalidate>
+      <form class="row g-3 needs-validation" method="post" th:action="@{/admin-panel/save/schedule}" th:object="${schedule}" novalidate>
         <input type="text" class="form-control" id="validationCustom00" th:value="${schedule.id}" th:field="*{id}" hidden>
         <div class="col-md-6">
           <label for="exampleRouteList" class="form-label">Маршрут</label>

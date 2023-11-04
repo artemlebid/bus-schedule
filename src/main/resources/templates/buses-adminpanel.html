@@ -116,7 +116,7 @@
                                 <td th:text="${schedule.seats}"></td>
                                 <td class="text-center">
                                     <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
-                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{/admin-panel/delete/schedule/{scheduleId}(scheduleId=${schedule.id})}">Видалити</a>
                                     <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-bs-whatever="${schedule.route.name}" th:data-bs-routeid="${schedule.route.id}">Купити</a>-->
                                 </td>
                             </tr>
@@ -133,7 +133,7 @@
                                 <td th:text="${schedule.seats}"></td>
                                 <td>
                                     <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
-                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{/admin-panel/delete/schedule/{scheduleId}(scheduleId=${schedule.id})}">Видалити</a>
                                     <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Купити</a>-->
                                 </td>
 
@@ -151,7 +151,7 @@
                                 <td th:text="${schedule.seats}"></td>
                                 <td>
                                     <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/schedule/{scheduleId}(scheduleId=${schedule.id})}">Редагувати</a>
-                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{/admin-panel/delete/schedule/{scheduleId}(scheduleId=${schedule.id})}">Видалити</a>
                                     <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Купити</a>-->
                                 </td>
                             </tr>
@@ -181,7 +181,7 @@
                                 <td th:text="${bus.company.name}"></td>
                                 <td class="text-center">
                                     <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/bus/{id}(id=${bus.id})}">Редагувати</a>
-                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{/admin-panel/delete/bus/{id}(id=${bus.id})}">Видалити</a>
                                     <!--                    <a class="btn btn-outline-success flex-shrink-0" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-bs-whatever="${schedule.route.name}" th:data-bs-routeid="${schedule.route.id}">Купити</a>-->
                                 </td>
                             </tr>
@@ -215,7 +215,7 @@
                                 <!--                                    </td>-->
                                 <td class="text-center">
                                     <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/company/{id}(id=${company.id})}">Редагувати</a>
-                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{/admin-panel/delete/company/{id}(id=${company.id})}">Видалити</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -240,7 +240,7 @@
                                 <td th:text="${route.name}"></td>
                                 <td class="text-center">
                                     <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/route/{id}(id=${route.id})}">Редагувати</a>
-                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{/admin-panel/delete/route/{id}(id=${route.id})}">Видалити</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -266,7 +266,7 @@
 
                                 <td class="text-center">
                                     <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/stop/{id}(id=${stop.id})}">Редагувати</a>
-                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{/admin-panel/delete/stop/{id}(id=${stop.id})}">Видалити</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -302,7 +302,7 @@
 
                                 <td class="text-center">
                                     <a class="btn btn-outline-secondary flex-shrink-0" th:href="@{/admin-panel/edit/routestop/{routeId}/{stopId}(routeId=${rs.route.id}, stopId=${rs.stop.id})}">Редагувати</a>
-                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{#}">Видалити</a>
+                                    <a class="btn btn-outline-danger flex-shrink-0" th:href="@{/admin-panel/delete/routestop/{routeId}/{stopId}(routeId=${rs.route.id}, stopId=${rs.stop.id})}">Видалити</a>
                                 </td>
                             </tr>
                             </tbody>

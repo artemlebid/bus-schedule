@@ -77,7 +77,7 @@ public class AdminController {
         return "edit-company-form";
     }
 
-    @PostMapping("/admin-panel/new/company")
+    @PostMapping("/admin-panel/save/company")
     public String saveCompany(@ModelAttribute("company") CompanyDto company){
         companyService.saveCompany(company);
         return "redirect:/admin-panel";
@@ -94,6 +94,11 @@ public class AdminController {
         model.addAttribute("company", company);
 
         return "edit-company-form";
+    }
+    @GetMapping("/admin-panel/delete/company/{id}")
+    public String deleteCompany(@PathVariable("id") Long id){
+        companyService.deleteCompany(id);
+        return "redirect:/admin-panel";
     }
 
     @GetMapping("/admin-panel/new/bus")
@@ -124,7 +129,12 @@ public class AdminController {
 
         return "edit-bus-form";
     }
-    @PostMapping("/admin-panel/new/bus")
+    @GetMapping("/admin-panel/delete/bus/{id}")
+    public String deleteBus(@PathVariable("id") Long id){
+        busService.deleteBus(id);
+        return "redirect:/admin-panel";
+    }
+    @PostMapping("/admin-panel/save/bus")
     public String saveBus(@ModelAttribute("bus") BusDto bus){
         busService.saveBus(bus);
         return "redirect:/admin-panel";
@@ -156,9 +166,14 @@ public class AdminController {
         return "edit-stop-form";
     }
 
-    @PostMapping("/admin-panel/new/stop")
+    @PostMapping("/admin-panel/save/stop")
     public String saveStop(@ModelAttribute("stop") StopDto stop){
         stopService.saveStop(stop);
+        return "redirect:/admin-panel";
+    }
+    @GetMapping("/admin-panel/delete/stop/{id}")
+    public String deleteStop(@PathVariable("id") Long id){
+        stopService.deleteStop(id);
         return "redirect:/admin-panel";
     }
 
@@ -186,9 +201,14 @@ public class AdminController {
 
         return "edit-route-form";
     }
-    @PostMapping("/admin-panel/new/route")
+    @PostMapping("/admin-panel/save/route")
     public String saveRoute(@ModelAttribute("route") RouteDto route){
         routeService.saveRoute(route);
+        return "redirect:/admin-panel";
+    }
+    @GetMapping("/admin-panel/delete/route/{id}")
+    public String deleteRoute(@PathVariable("id") Long id){
+        routeService.deleteRoute(id);
         return "redirect:/admin-panel";
     }
 
@@ -211,7 +231,7 @@ public class AdminController {
         return "edit-routestop-form";
     }
 
-    @PostMapping("/admin-panel/new/routestop")
+    @PostMapping("/admin-panel/save/routestop")
     public String saveRouteStop(@ModelAttribute("routesStops") RoutesStopsDto routesStops){
         LocalTime arrivalTime = routesStops.getArrivalTime();
         LocalTime departureTime = routesStops.getDepartureTime();
@@ -220,6 +240,11 @@ public class AdminController {
         Long stopId = routesStops.getStop().getId();
         Long routeId = routesStops.getRoute().getId();
         routesStopsService.customSave(arrivalTime, departureTime, price, stopNumber, stopId, routeId);
+        return "redirect:/admin-panel";
+    }
+    @GetMapping("/admin-panel/delete/routestop/{routeId}/{stopId}")
+    public String deleteRouteStops(@PathVariable("routeId") Long routeId, @PathVariable("stopId")Long stopId){
+        routesStopsService.deleteRoutesStops(routeId, stopId);
         return "redirect:/admin-panel";
     }
     @GetMapping("/admin-panel/new/routestop")
@@ -272,9 +297,14 @@ public class AdminController {
 
         return "edit-schedule-form";
     }
-    @PostMapping("/admin-panel/new/schedule")
+    @PostMapping("/admin-panel/save/schedule")
     public String saveSchedule(@ModelAttribute("schedule") ScheduleDto schedule){
         scheduleService.saveSchedule(schedule);
+        return "redirect:/admin-panel";
+    }
+    @GetMapping("/admin-panel/delete/schedule/{id}")
+    public String deleteSchedule(@PathVariable("id") Long id){
+        scheduleService.deleteSchedule(id);
         return "redirect:/admin-panel";
     }
 }

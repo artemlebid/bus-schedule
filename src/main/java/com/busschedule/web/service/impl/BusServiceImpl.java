@@ -27,6 +27,11 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
+    public void deleteBus(Long id) {
+        busRepository.deleteById(id);
+    }
+
+    @Override
     public List<BusDto> findAllBuses() {
         List<Bus> allBuses = busRepository.findAll();
         return allBuses.stream().map((bus -> mapToBusDto(bus))).collect(Collectors.toList());

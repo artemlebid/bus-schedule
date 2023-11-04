@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface StopService {
     void saveStop(StopDto stop);
+    void deleteStop(Long id);
     List<StopDto> findAllStops();
     StopDto findStopById(Long id);
 }

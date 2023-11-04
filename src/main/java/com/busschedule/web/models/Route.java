@@ -18,7 +18,10 @@ public class Route {
     private Long id;
     @Column(unique = true)
     private String name;
-    @OneToMany(mappedBy = "route")
+    @OneToMany(
+            mappedBy = "route",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
     private List<Schedule> schedule;
     @OneToMany(
             mappedBy = "route",

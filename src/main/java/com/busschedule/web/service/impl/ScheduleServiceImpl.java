@@ -39,6 +39,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public void deleteSchedule(Long id) {
+        scheduleRepository.deleteById(id);
+    }
+
+    @Override
     public void saveScheduleList(List<ScheduleDto> schedules) {
         List<Schedule> scheduleList = schedules.stream().map(scheduleDto -> mapToSchedule(scheduleDto)).collect(Collectors.toList());
         scheduleRepository.saveAll(scheduleList);

@@ -2,6 +2,7 @@ package com.busschedule.web.service.impl;
 
 import com.busschedule.web.dto.RoutesStopsDto;
 import com.busschedule.web.models.RoutesStops;
+import com.busschedule.web.models.RoutesStopsId;
 import com.busschedule.web.repository.RoutesStopsRepository;
 import com.busschedule.web.service.RoutesStopsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,12 @@ public class RoutesStopsServiceImpl implements RoutesStopsService {
     @Override
     public void save(RoutesStopsDto routesStops) {
         routesStopsRepository.save(mapToRoutesStops(routesStops));
+    }
+
+    @Override
+    public void deleteRoutesStops(Long routeId, Long stopId) {
+        RoutesStopsId routesStopsId = new RoutesStopsId(routeId, stopId);
+        routesStopsRepository.deleteById(routesStopsId);
     }
 
     @Override
