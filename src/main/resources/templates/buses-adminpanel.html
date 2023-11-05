@@ -38,20 +38,9 @@
             </ul>
             <form class="d-flex" th:action="@{/schedule/search}" th:object="${search}" role="search"  method="get">
                 <input th:if="${#fields.hasErrors('searchLine')}" th:errors="*{searchLine}" class="form-control is-invalid me-2" list="datalistOptions" type="search" placeholder="Куди їдемо?" aria-label="Search" th:field="*{searchLine}">
-                <input th:unless="${#fields.hasErrors('searchLine')}" class="form-control me-2" type="search" list="datalistOptions" placeholder="Куди їдемо?" aria-label="Search" th:field="*{searchLine}">
+                <input th:unless="${#fields.hasErrors('searchLine')}" class="form-control me-2" type="search" list="datalistOptions" placeholder="Куди їдемо?" aria-label="Search" th:field="*{searchLine}" autocomplete="off">
                 <datalist id="datalistOptions">
-                    <option value="Вінниця">
-                    <option value="Могилів">
-                    <option value="Вапнярка">
-                    <option value="Ямпіль">
-                    <option value="Березівка">
-                    <option value="Джурин">
-                    <option value="Рахни">
-                    <option value="Немирів">
-                    <option value="Моївка">
-                    <option value="Сокіл">
-                    <option value="Гонівка">
-                    <option value="Чубарівка">
+                    <option th:each="stop : ${stops}" th:value="${stop.name}">
                 </datalist>
                 <button class="btn btn-outline-success" type="submit">Пошук</button>
             </form>
