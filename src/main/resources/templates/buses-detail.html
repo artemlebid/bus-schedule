@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bus Detail</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
 <!-- Navigation-->
@@ -132,46 +132,88 @@
                                     <form class="row g-2" th:action="@{/schedule/order}" method="post" th:object="${orderForm}">
                                         <input type="hidden" id="hiddenFieldFromStop" th:value="${routesStops.get(0).stop.name}" th:name="fromStop"/>
                                         <input type="hidden" id="hiddenFieldScheduleId" th:value="${schedule.id}" th:name="schedule"/>
-                                        <div class="col-auto">
+                                        <div class="col-6">
                                             <label for="recipient-stop" class="col-form-label">Зупинка:</label>
                                             <input type="text" class="form-control" id="recipient-stop" th:name="toStop" readonly="">
 
                                         </div>
-                                        <div class="col-auto">
+                                        <div class="col-6">
                                             <label for="recipient-count" class="col-form-label">Кільк. квитків:</label>
                                             <input type="text" class="form-control" id="recipient-count" th:name="countSeats" readonly="">
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="col-12">
                                             <label for="recipient-price" class="col-form-label">Ціна (грн.):</label>
                                             <input type="text" class="form-control" id="recipient-price" th:name="payment" readonly="">
                                         </div>
-                                        <div class="col-auto">
+                                        <div class="col-6">
                                             <label for="recipient-name" class="col-form-label">Імʼя:</label>
                                             <input type="text" class="form-control" id="recipient-name" th:field="*{name}" placeholder="Введіть імʼя">
+                                            <div id="nameValidationValid" class="valid-feedback">
+                                                Виглядає чудово!
+                                            </div>
+                                            <div id="nameValidationInvalid" class="invalid-feedback">
+                                                Імʼя повинно містити від 2 до 30 символів
+                                            </div>
                                         </div>
-                                        <div class="col-auto">
+                                        <div class="col-6">
                                             <label for="recipient-surname" class="col-form-label">Прізвище:</label>
                                             <input type="text" class="form-control" id="recipient-surname" th:field="*{surname}" placeholder="Введіть прізвище">
+                                            <div id="surnameValidationValid" class="valid-feedback">
+                                                Виглядає чудово!
+                                            </div>
+                                            <div id="surnameValidationInvalid" class="invalid-feedback">
+                                                Прізвище повинно містити від 2 до 30 символів
+                                            </div>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="col-12">
                                             <label for="recipient-phone" class="col-form-label">Телефон:</label>
                                             <input type="text" class="form-control" id="recipient-phone" name="phone" maxlength="13" th:field="*{phone}" placeholder="098-765-43-21">
+                                            <div id="phoneValidationValid" class="valid-feedback">
+                                                Виглядає чудово!
+                                            </div>
+                                            <div id="phoneValidationInvalid" class="invalid-feedback">
+                                                Введіть коректний номер
+                                            </div>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="col-12">
                                             <label for="recipient-email" class="col-form-label">Email:</label>
                                             <input type="email" class="form-control" id="recipient-email" th:field="*{email}" placeholder="example@mail.com">
+                                            <div id="emailValidationValid" class="valid-feedback">
+                                                Виглядає чудово!
+                                            </div>
+                                            <div id="emailValidationInvalid" class="invalid-feedback">
+                                                Введіть коректну ел.пошту
+                                            </div>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="col-12">
                                             <label for="recipient-card" class="col-form-label">Номер карти:</label>
                                             <input type="text" class="form-control" id="recipient-card" placeholder="xxxx-xxxx-xxxx-xxxx" maxlength="19">
+                                            <div id="cardValidationValid" class="valid-feedback">
+                                                Виглядає чудово!
+                                            </div>
+                                            <div id="cardValidationInvalid" class="invalid-feedback">
+                                                Введіть коректний номер карти.
+                                            </div>
                                         </div>
-                                        <div class="col-auto">
+                                        <div class="col-6">
                                             <label for="recipient-date" class="col-form-label">Термін дії:</label>
                                             <input type="text" class="form-control" id="recipient-date" placeholder="мм/РР" maxlength="5">
+                                            <div id="dateValidationValid" class="valid-feedback">
+                                                Виглядає чудово!
+                                            </div>
+                                            <div id="dateValidationInvalid" class="invalid-feedback">
+                                                Введіть коректну дату.
+                                            </div>
                                         </div>
-                                        <div class="col-auto">
+                                        <div class="col-6">
                                             <label for="recipient-cvv" class="col-form-label">CVV:</label>
                                             <input type="password" class="form-control" id="recipient-cvv" maxlength="3" placeholder="xxx">
+                                            <div id="cvvValidationValid" class="valid-feedback">
+                                                Виглядає чудово!
+                                            </div>
+                                            <div id="cvvValidationInvalid" class="invalid-feedback">
+                                                Введіть CVV код.
+                                            </div>
                                         </div>
                                         <button class="btn btn-primary" type="submit" id="payment-form-submit" hidden>Оплатити</button>
                                     </form>
@@ -188,6 +230,16 @@
             </div>
         </div>
     </div>
+<!--    <div th:if="${#fields.hasErrors('searchLine')}" >-->
+<!--        <div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">-->
+<!--            <div class="d-flex">-->
+<!--                <div class="toast-body">-->
+<!--                    Помилка під час перевірки форми :( Спробуйте ще раз!-->
+<!--                </div>-->
+<!--                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </section>
 <!-- Related items section-->
 <!--<section class="py-5 bg-light">-->
@@ -300,6 +352,12 @@
 <!--    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>-->
 <!--</footer>-->
 <!-- Bootstrap core JS-->
+<!--<script>-->
+<!--    function showToast() {-->
+<!--        var myToast = new bootstrap.Toast(document.querySelector('.toast'));-->
+<!--        myToast.show();-->
+<!--    }-->
+<!--</script>-->
 <script>
     const submitBtn = document.getElementById('payment-form-submit');
 
@@ -415,6 +473,60 @@
     // });
 </script>
 <script>
+    var nameInput = document.getElementById('recipient-name');
+    var nameValidationValid = document.getElementById('nameValidationValid');
+    var nameValidationInvalid = document.getElementById('nameValidationInvalid');
+
+    // Регулярний вираз для перевірки правильності формату імені
+    var nameRegex = /^[A-Za-zА-Яа-яіїґє\s']+$/; // Літери, пробіли і апострофи
+
+    nameInput.addEventListener('input', function() {
+        var nameValue = nameInput.value.trim(); // Видаляємо зайві пробіли
+
+        if (nameValue.length >= 2 && nameValue.length <= 30 && nameRegex.test(nameValue)) {
+            nameValidationValid.style.display = 'block';
+            nameValidationInvalid.style.display = 'none';
+            // Валідація успішна, тут ви можете робити додаткові дії, якщо потрібно
+            nameInput.classList.add('is-valid');
+            nameInput.classList.remove('is-invalid');
+        } else {
+            nameValidationValid.style.display = 'none';
+            nameValidationInvalid.style.display = 'block';
+            nameInput.classList.add('is-invalid');
+            nameInput.classList.remove('is-valid');
+        }
+    });
+</script>
+
+<script>
+    var surnameInput = document.getElementById('recipient-surname');
+    surnameInput.addEventListener('input', function validateSurname() {
+
+        var surnameValue = surnameInput.value.trim(); // Видаляємо зайві пробіли
+
+        var surnameValidationValid = document.getElementById('surnameValidationValid');
+        var surnameValidationInvalid = document.getElementById('surnameValidationInvalid');
+
+        // Регулярний вираз для перевірки правильності формату прізвища
+        var surnameRegex = /^[A-Za-zА-Яа-яіїґє\s']+$/; // Літери, пробіли і апострофи
+
+        if (surnameValue.length >= 2 && surnameValue.length <= 30 && surnameRegex.test(surnameValue)) {
+            surnameValidationValid.style.display = 'block';
+            surnameValidationInvalid.style.display = 'none';
+            // Валідація успішна, тут ви можете робити додаткові дії, якщо потрібно
+            surnameInput.classList.add('is-valid');
+            surnameInput.classList.remove('is-invalid');
+        } else {
+            surnameValidationValid.style.display = 'none';
+            surnameValidationInvalid.style.display = 'block';
+            surnameInput.classList.add('is-invalid');
+            surnameInput.classList.remove('is-valid');
+        }
+    });
+</script>
+
+
+<script>
     // Отримуємо доступ до поле вводу
     var phoneInput = document.getElementById('recipient-phone');
     // Додаємо обробник події input
@@ -439,6 +551,61 @@
     });
 </script>
 <script>
+    var emailInput = document.getElementById('recipient-email');
+    emailInput.addEventListener('input', function validateEmail() {
+
+        var emailValue = emailInput.value.trim(); // Видаляємо зайві пробіли
+
+        var emailValidationValid = document.getElementById('emailValidationValid');
+        var emailValidationInvalid = document.getElementById('emailValidationInvalid');
+
+        // Регулярний вираз для перевірки правильності формату email
+        var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+        if (emailRegex.test(emailValue)) {
+            emailValidationValid.style.display = 'block';
+            emailValidationInvalid.style.display = 'none';
+            // Валідація успішна, тут ви можете робити додаткові дії, якщо потрібно
+            emailInput.classList.add('is-valid');
+            emailInput.classList.remove('is-invalid');
+        } else {
+            emailValidationValid.style.display = 'none';
+            emailValidationInvalid.style.display = 'block';
+            emailInput.classList.add('is-invalid');
+            emailInput.classList.remove('is-valid');
+        }
+    });
+</script>
+
+<script>
+    // Функція для валідації номера кредитної карти за допомогою Luhn-алгоритму
+    function isCreditCardValid(cardNumber) {
+        // Видаляємо нецифрові символи та дефіси
+        cardNumber = cardNumber.replace(/[^0-9]/g, '');
+
+        // Перевірка довжини номера карти (зазвичай 13-19 цифр)
+        if (cardNumber.length < 13 || cardNumber.length > 19) {
+            return false;
+        }
+
+        // Реверс номера та перевірка за Luhn-алгоритмом
+        var sum = 0;
+        var doubleUp = false;
+        for (var i = cardNumber.length - 1; i >= 0; i--) {
+            var digit = parseInt(cardNumber.charAt(i), 10);
+            if (doubleUp) {
+                digit *= 2;
+                if (digit > 9) {
+                    digit -= 9;
+                }
+            }
+            sum += digit;
+            doubleUp = !doubleUp;
+        }
+
+        return sum % 10 === 0;
+    }
+
     // Отримуємо доступ до поля вводу
     var cardInput = document.getElementById('recipient-card');
 
@@ -457,8 +624,26 @@
 
         // Встановлюємо отформатований текст у поле вводу
         cardInput.value = formattedValue;
+
+        // Перевірка валідації номера карти та відображення результату
+        var cardValidationValid = document.getElementById('cardValidationValid');
+        var cardValidationInvalid = document.getElementById('cardValidationInvalid');
+
+        if (isCreditCardValid(inputValue)) {
+            cardValidationValid.style.display = 'block';
+            cardValidationInvalid.style.display = 'none';
+            cardInput.classList.add('is-valid');
+            cardInput.classList.remove('is-invalid');
+        } else {
+            cardValidationValid.style.display = 'none';
+            cardValidationInvalid.style.display = 'block';
+            cardInput.classList.add('is-invalid');
+            cardInput.classList.remove('is-valid');
+        }
     });
 </script>
+
+
 <script>
     // Отримуємо доступ до поля вводу
     var dateInput = document.getElementById('recipient-date');
@@ -502,6 +687,6 @@
     }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -71,9 +71,20 @@ public class BusController {
         return "buses-detail";
     }
     @PostMapping("/schedule/order")
-    public String scheduleOrder(@ModelAttribute("orderForm") OrderFormDto orderForm, BindingResult result, @ModelAttribute("schedule")Schedule schedule){
+    public String scheduleOrder(@ModelAttribute("schedule")Schedule schedule,
+                                @ModelAttribute("search") SearchDto searchDto,
+                                @Valid @ModelAttribute("orderForm") OrderFormDto orderForm,
+                                BindingResult result,
+                                Model model){
         if(result.hasErrors()){
-            return "buses-error";
+            List<RoutesStops> routesStops = schedule.getRoute().getRoutesStops(); //????????????????????????????/
+            routesStops.sort((o1,o2) -> o1.getStopNumber() - o2.getStopNumber());
+            model.addAttribute("search", searchDto);
+            model.addAttribute("schedule", schedule);
+            model.addAttribute("routesStops", routesStops);
+            model.addAttribute("orderForm", orderForm);
+            model.addAttribute("successMessage", "error");
+            return "buses-detail";
         }
         schedule.setSeats(schedule.getSeats() - orderForm.getCountSeats());
         if(schedule.getSeats() == 0){
